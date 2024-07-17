@@ -15,7 +15,7 @@ export default function Main() {
     <div className="flex flex-col justify-between mx-auto max-w-6xl gap-y-4 px-4 py-6 md:flex-row-reverse md:gap-x-4 md:px-8 lg:py-10">
       <div>
         <Image
-          src="/myimage.webp"
+          src="/skilled-worker-creation_1_1682x1545.webp"
           className="drop-shadow " 
           unoptimized = {true}
           priority="high"
@@ -27,19 +27,9 @@ export default function Main() {
       <div className="info-wrapper flex flex-1 flex-col gap-y-4 md:justify-center lg:justify-end lg:gap-y-8">
         <h1 className="font-main text-4xl font-semibold md:!leading-tight lg:text-5xl xl:text-6xl opacity-80 ">
           {" "}
-          Best Place to Find <br></br> Your Favourite <br></br> Books.
+          Best Place to Find <br></br> Skilled <br></br> Workers.
         </h1>
-        <p className="font-MyFont lg:text-lg opacity-80 ">
-          Unleash your imagination with our online bookstore! Discover a vast
-          selection of books for all ages and interests, with something for
-          everyone. Shop now and find your next favorite read!
-        </p>
-        <p className="w-[125px] ring-1 ring-textgray ring-opacity-80 flex flex-row rounded py-3 px-4 text-lg opacity-75 font-MyFont font-semibold  ">
-          Browse
-          <FiArrowDownCircle 
-          onClick={() => router.push('#books', { scroll: true })}
-           className="icon-bottom ml-3 mt-2 scale-110  bounce" />
-        </p>
+        <p className="font-MyFont lg:text-lg opacity-80 ">Your one-stop solution for hiring skilled workers or finding the perfect job.</p>
         <div className="flex flex-row gap-x-8 mt-6 opacity-80 !stroke-current stroke-2 ">
           {" "}
           <Link href="https://www.facebook.com/">
@@ -60,9 +50,9 @@ export default function Main() {
           </Link>
         </div>
         <div className="mt-12 flex gap-2 font-MyFont divide-x divide-textgray md:w-[125%] lg:w-auto">
-          <div className="">Fast Delivery</div>
-          <div className=" pl-2">Exclusive Deals</div>
-          <div className=" pl-2">Curated Collections</div>
+          <div className="">Quick Hiring</div>
+          <div className=" pl-2">Reliable Experts</div>
+          <div className=" pl-2">Tailored Services</div>
         </div>
       </div>
     </div>

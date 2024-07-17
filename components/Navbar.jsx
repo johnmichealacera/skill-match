@@ -1,7 +1,6 @@
 "use client";
-import React from "react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import {
   AiOutlineUser,
@@ -15,21 +14,56 @@ import { PiTelegramLogo } from "react-icons/pi";
 import { SlSocialInstagram } from "react-icons/sl";
 import { FiFacebook } from "react-icons/fi";
 import { CgLogIn } from "react-icons/cg";
-import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WIshlistContext";
 
-export default function Navbar() {
+async function fetchSessionData() {
+  try {
+    const response = await fetch('/api/session');
+    if (!response.ok) {
+      throw new Error('Failed to fetch session');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch session:', error);
+    throw new Error('Failed to fetch session');
+  }
+}
+
+const general_links = [
+  { name: 'Find Skilled Worker', href: '#', icon: BiSearch },
+  { name: 'Find Work', href: '#', icon: BiSearch },
+  { name: 'Login', href: '/Login', icon: CgLogIn },
+];
+const worker_links = [
+  { name: 'Find Work', href: '#', icon: BiSearch },
+  { name: 'My Jobs', href: '/Login', icon: CgLogIn },
+  { name: 'Messages', href: '#', icon: CgLogIn },
+  { name: 'Login', href: '/Login', icon: CgLogIn },
+];
+const employer_links = [
+  { name: 'Find Talents', href: '#', icon: BiSearch },
+  { name: 'My Talents', href: '/Login', icon: CgLogIn },
+  { name: 'Messages', href: '#', icon: CgLogIn },
+  { name: 'Login', href: '/Login', icon: CgLogIn },
+];
+
+
+export default function Navbar({session1}) {
   const [isOpen, setIsOpen] = useState(false);
-  const { cartItems } = useCart();
-  const { WishlistItems } = useWishlist();
+  const [session, setSession] = useState(null);
   const openModal = () => {
     setIsOpen(true);
   };
-
   const closeModal = () => {
     setIsOpen(false);
   };
-
+  useEffect(() => {
+    const fetchSession = async () => {
+      const session = await fetchSessionData();
+      setSession(session);
+    };
+    fetchSession();
+  }, []);
   useEffect(() => {
     const navbar = document.querySelector(".navbar");
     const toggleShadow = () => {
@@ -56,56 +90,36 @@ export default function Navbar() {
       window.removeEventListener("scroll", toggleShadow);
     };
   }, []);
+  const navLinks = React.useMemo(() => {
+    if (session?.user?.role === 'employer') {
+      return employer_links;
+    } else if (session?.user?.role === 'worker') {
+      return worker_links;
+    } else {
+      return general_links;
+    }
+  }, [session]);
   return (
     <div className="sticky top-0 z-20 ">
       <div className="sticky top-0 z-20 md:justify-between lg:justify-around navbar px-8 py-6 bg-primary nav-main hidden md:flex ">
         <Link className="font-main text-3xl font-semibold md:flex" href="/">
           {" "}
-          Book Odyssey{" "}
+          SkillMatch Socorro{" "}
         </Link>
         <div className=" hidden md:flex text-lg font-MyFont gap-x-8 ">
-          <Link
-            href="/Search"
-            className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
-          >
-            <BiSearch className="mt-1 icon-top mr-3" />
-            Search
-          </Link>
-          <Link
-            href="/Wishlist"
-            className="hover:opacity-95 opacity-70 relative flex flex-row link link-underline link-underline-black"
-          >
-            <FaRegHeart className="mt-1 icon-top mr-3" />
-            Wishlist
-          </Link>
-          <Link
-            href="/Cart"
-            className="hover:opacity-95 opacity-70  relative flex flex-row  link link-underline link-underline-black"
-          >
-            <span
-              className={`${
-                cartItems.length > 0 ? "block" : "hidden"
-              } absolute -top-1 -right-3 bg-red-600 text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center`}
+        {navLinks.map((link) => {
+          const LinkIcon = link.icon;
+          return (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
             >
-              {cartItems.length}
-            </span>
-            <AiOutlineShoppingCart className="mt-1  icon-top mr-3" />
-            Cart
-          </Link>
-          <Link
-            href="/Dashboard"
-            className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
-          >
-            <AiOutlineUser className="mt-1 icon-top mr-3" />
-            Dashboard
-          </Link>
-          <Link
-            href="/Login"
-            className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
-          >
-            <CgLogIn className="mt-1 icon-top mr-3" />
-            Login
-          </Link>
+              <LinkIcon className="mt-1 icon-top mr-3" />
+              <p className="hidden md:block">{link.name}</p>
+            </Link>
+          );
+        })}
         </div>
       </div>
       {/*============================================================================= */}
@@ -120,25 +134,10 @@ export default function Navbar() {
             href="/"
           >
             {" "}
-            Book Odyssey{" "}
+            SkillMatch Socorro{" "}
           </Link>
         </div>
         <div className="flex mt-2 gap-x-6  mr-2 md:hidden">
-          <Link href="/Search">
-            {" "}
-            <BiSearch className="icon-top" />
-          </Link>
-          <Link href="/Cart" className="relative"
-           onClick={closeModal}>
-            <span
-              className={`${
-                cartItems.length > 0 ? "block" : "hidden"
-              } absolute -top-3 -right-3 bg-red-600 text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center`}
-            >
-              {cartItems.length}
-            </span>{" "}
-            <AiOutlineShoppingCart className="icon-top" />
-          </Link>
           <Link href="/Login"
            onClick={closeModal}>
             {" "}
@@ -169,10 +168,10 @@ export default function Navbar() {
               className="font-main text-2xl font-medium"
               onClick={closeModal}
             >
-              Book Odyssey
+              SkillMatch Socorro
             </Link>
             <p className="text-center px-6 font-MyFont">
-              One of the best book stores in the World
+              Your one-stop solution for hiring skilled workers or finding the perfect job.
             </p>
           </div>
           <nav className="mt-8 mb-6 self-stretch">
@@ -190,13 +189,22 @@ export default function Navbar() {
                 </li>
                 <li className="flex w-full flex-col">
                   <Link
-                    href="/Dashboard"
+                    href="/"
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
                     {" "}
-                    <span>Dashboard</span>
-                    <AiOutlineUser className="opacity-90" />
+                    <span>Find Skilled Worker</span>
+                  </Link>
+                </li>
+                <li className="flex w-full flex-col">
+                  <Link
+                    href="/"
+                    onClick={closeModal}
+                    className="flex items-center gap-x-2 py-1 px-2 text-xl"
+                  >
+                    {" "}
+                    <span>Find Work</span>
                   </Link>
                 </li>
                 <li className="flex w-full flex-col">
@@ -208,26 +216,6 @@ export default function Navbar() {
                     {" "}
                     <span>Login</span>
                     <CgLogIn className="opacity-90" />
-                  </Link>
-                </li>
-                <li className="flex w-full flex-col">
-                  <Link
-                    href="/Wishlist"
-                    onClick={closeModal}
-                    className="flex items-center  gap-x-2 py-1 px-2 text-xl"
-                  >
-                    <span>Whishlist</span>
-                    {" "}<div className="relative">
-                    <span
-                      className={`${
-                        WishlistItems.length > 0 ? "block" : "hidden"
-                      } absolute -top-1 -right-4 bg-red-600 text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center`}
-                    >
-                       {WishlistItems.length}
-                    </span>
-                    <FaRegHeart className=" opacity-80 " />
-                    </div>
-                   
                   </Link>
                 </li>
                 <li className="flex w-full flex-col">
@@ -248,6 +236,16 @@ export default function Navbar() {
                   >
                     {" "}
                     <span>Contact US</span>
+                  </Link>
+                </li>
+                <li className="flex w-full flex-col">
+                  <Link
+                    href="/Policy"
+                    onClick={closeModal}
+                    className="flex items-center gap-x-2 py-1 px-2 text-xl"
+                  >
+                    {" "}
+                    <span>Privacy Policy</span>
                   </Link>
                 </li>
               </ul>

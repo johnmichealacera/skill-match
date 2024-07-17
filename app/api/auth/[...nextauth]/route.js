@@ -11,7 +11,7 @@ export const authOptions = {
       credentials: {},
 
       async authorize(credentials) {
-        const { email, password } = credentials;
+        const { email, password, role } = credentials;
 
         try {
           await connectMongoDB();
@@ -23,13 +23,20 @@ export const authOptions = {
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
 
-          if (!passwordsMatch) {
+          if (!passwordsMatch && role === user?.role) {
             return null;
           }
 
-          return user;
+          // Return user object including the role
+          return {
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,  // Ensure role is included here
+          };
         } catch (error) {
-          console.log("Error: ", error);
+          console.error("Error: ", error);
         }
       },
     }),
@@ -37,9 +44,30 @@ export const authOptions = {
   session: {
     strategy: "jwt",
   },
-
   pages: {
     signIn: "/Login",
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      // Add user role to the token right after signin
+      if (user) {
+        token.role = user.role;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      // Add role value to session
+      if (token) {
+        session.user.role = token.role;
+        session.user.firstName = token.firstName;
+        session.user.lastName = token.lastName;
+      }
+
+      return session;
+    },
   },
 };
 

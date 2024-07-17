@@ -31,7 +31,6 @@ export async function POST(req) {
       cart.total = total;
       await cart.save();
     }
-    console.log(items);
 
     return NextResponse.json(
       { message: "Cart data saved successfully." },

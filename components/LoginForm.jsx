@@ -10,12 +10,18 @@ import toast from "react-hot-toast";
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !password || !role) {
+      setError("All fields are necessary.");
+      return;
+    }
 
     try {
       const res3 = await signIn("credentials", {
@@ -31,6 +37,7 @@ export default function LoginForm() {
         body:JSON.stringify({
           email,
           password,
+          role,
         }),
       })
       const res2 = await res.json()
@@ -93,6 +100,19 @@ export default function LoginForm() {
                 name="password"
               />
             </label>
+          </div>
+          <div className="mb-4">
+            <select
+                onChange={(e) => setRole(e.target.value)}
+              id="role"
+              name="role"
+              placeholder="Select role"
+              className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            >
+              <option value="">Select role...</option>
+              <option value="employer">Employer</option>
+              <option value="skilled-worker">Skilled Worker</option>
+            </select>
           </div>
       
           <button

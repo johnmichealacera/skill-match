@@ -7,9 +7,11 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function RegisterForm() {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
@@ -17,7 +19,7 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !email || !password) {
+    if (!firstName || !lastName || !email || !password || !role) {
       setError("All fields are necessary.");
       return;
     }
@@ -44,9 +46,11 @@ export default function RegisterForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
+          firstName,
+          lastName,
           email,
           password,
+          role,
         }),
       });
 
@@ -79,58 +83,81 @@ export default function RegisterForm() {
       <div className="flex-1 pt-8 md:pt-0 md:pl-10 xl:pl-20">
         <h2 className="text-xl mb-2 font-MyFont font-bold">Register Now!</h2>
         <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="font-MyFont font-medium">
-           Full Name
-            <input
-              placeholder="Enter Your Full Name"
-              className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
-              type="text"
-              name="name"
-              onChange={(e) => setName(e.target.value)}
-            />
-          </label>
-        </div>
-        <div className="mb-4">
-          <label className="font-MyFont font-medium">
-            Email Address
-            <input
-                 onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter Your Valid Email"
-              className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
-              type="email"
-              name="email"
-            />
-          </label>
-        </div>
-        <div className="mb-4">
-          <label className="font-MyFont font-medium">
-            Password
-            <input
-                 onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
-              type="password"
-              name="password"
-            />
-          </label>
-        </div>
-    
-        <button
-        
-          className="bg-textgray text-white w-full flex justify-center py-2 px-2 mt-2 font-MyFont text-lg font-medium md:rounded md:py-1"
-        >
-          <RiSendPlaneLine className="mt-1 text-white mr-3" />
-          <span>Register</span>
-        </button>
-        {error && (
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
+            First Name
+              <input
+                placeholder="Enter Your First Name"
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="text"
+                name="firstName"
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
+            Last Name
+              <input
+                placeholder="Enter Your Last Name"
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="text"
+                name="lastName"
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
+              Email Address
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter Your Valid Email"
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="email"
+                name="email"
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
+              Password
+              <input
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="password"
+                name="password"
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <select
+              onChange={(e) => setRole(e.target.value)}
+              id="role"
+              name="role"
+              placeholder="Select role"
+              className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            >
+              <option value="">Select role...</option>
+              <option value="employer">Employer</option>
+              <option value="skilled-worker">Skilled Worker</option>
+            </select>
+          </div>
+          <button
+            className="bg-textgray text-white w-full flex justify-center py-2 px-2 mt-2 font-MyFont text-lg font-medium md:rounded md:py-1"
+          >
+            <RiSendPlaneLine className="mt-1 text-white mr-3" />
+            <span>Register</span>
+          </button>
+          {error && (
             <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
               {error}
             </div>
-          )}
-        <div className="text-lg mt-3 flex justify-end text-right" >
-        Already have an account? <Link href={"/Login"}> <span className="underline pl-2">Login Now!</span></Link>
-        </div>
+            )}
+          <div className="text-lg mt-3 flex justify-end text-right" >
+          Already have an account? <Link href={"/Login"}> <span className="underline pl-2">Login Now!</span></Link>
+          </div>
         </form>
       </div>
     </div>

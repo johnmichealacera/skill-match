@@ -8,8 +8,8 @@ connectMongoDB();
 
 export async function POST(req) {
 
-  const { email, password } = await req.json();
-  if (!email || !password) {
+  const { email, password, role } = await req.json();
+  if (!email || !password || !role) {
     return NextResponse.json(
       { error: "Please provide all the fields" },
       { status: 422 }
@@ -26,7 +26,7 @@ export async function POST(req) {
     }
 
     const doMatch = await bcrypt.compare(password, user.password);
-    if (doMatch) {
+    if (doMatch && role === user?.role) {
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
       });

@@ -9,13 +9,15 @@ import Wishlist from "@/models/wishlist";
 
 export async function POST(req) {
   try {
-    const { name, email, password } = await req.json();
+    const { firstName, lastName, email, password, role } = await req.json();
     const hashedPassword = await bcrypt.hash(password, 10);
     await connectMongoDB();
     const newUser = await User.create({
-      name,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
+      role,
     });
     // Create a cart collection with the user's _id
     await Cart.create({
@@ -27,7 +29,6 @@ export async function POST(req) {
     // await Payment.create({
     //   user: newUser._id,
     // });
-    console.log("userId", newUser._id);
     // Create an order collection with the user's _id
 
     return NextResponse.json({ message: "User registered." }, { status: 201 });
