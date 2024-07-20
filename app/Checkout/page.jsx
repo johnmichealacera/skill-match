@@ -52,89 +52,89 @@ export default function Checkout() {
       console.error("Error during saving data into cart: ", error);
     }
   };
-  const makePayment = async () => {
-    const token = Cookies.get("token"); // Get the token from cookies
-    setItems(cartItems);
-    const total = calculateTotalPrice();
+  // const makePayment = async () => {
+  //   const token = Cookies.get("token"); // Get the token from cookies
+  //   setItems(cartItems);
+  //   const total = calculateTotalPrice();
 
-    // Make API call to the serverless API to create a Razorpay order
-    const data = await fetch("api/razorpay", {
-      method: "POST",
-      body: JSON.stringify({
-        total,
-      }),
-    }).then((t) => t.json());
-    console.log("Razorpay data", data);
-    var options = {
-      key: process.env.RAZORPAY_API_KEY,
-      name: name,
-      currency: data.currency,
-      amount: data.amount,
-      order_id: data.id,
-      description: "Thank you for your purchase",
-      handler: async function (response) {
-        console.log(response);
-        const paymentData = {
-          name,
-          email,
-          phone,
-          address,
-          payment,
-          items,
-          total,
-          razorpay_payment_id: response.razorpay_payment_id,
-          razorpay_order_id: response.razorpay_order_id,
-          razorpay_signature: response.razorpay_signature,
-        };
+  //   // Make API call to the serverless API to create a Razorpay order
+  //   const data = await fetch("api/razorpay", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       total,
+  //     }),
+  //   }).then((t) => t.json());
+  //   console.log("Razorpay data", data);
+  //   var options = {
+  //     key: process.env.RAZORPAY_API_KEY,
+  //     name: name,
+  //     currency: data.currency,
+  //     amount: data.amount,
+  //     order_id: data.id,
+  //     description: "Thank you for your purchase",
+  //     handler: async function (response) {
+  //       console.log(response);
+  //       const paymentData = {
+  //         name,
+  //         email,
+  //         phone,
+  //         address,
+  //         payment,
+  //         items,
+  //         total,
+  //         razorpay_payment_id: response.razorpay_payment_id,
+  //         razorpay_order_id: response.razorpay_order_id,
+  //         razorpay_signature: response.razorpay_signature,
+  //       };
 
-        // Make API call to verify the payment on the server
-        const verifyResponse = await fetch("api/paymentverify", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(paymentData),
-        });
+  //       // Make API call to verify the payment on the server
+  //       const verifyResponse = await fetch("api/paymentverify", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         body: JSON.stringify(paymentData),
+  //       });
 
-        const queryString = `name=${name}&email=${email}&phone=${phone}&address=${address}&payment=${payment}
-      \&total=${total}&razorpay_payment_id=${
-          response.razorpay_payment_id
-        }&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${
-          response.razorpay_signature
-        }`;
+  //       const queryString = `name=${name}&email=${email}&phone=${phone}&address=${address}&payment=${payment}
+  //     \&total=${total}&razorpay_payment_id=${
+  //         response.razorpay_payment_id
+  //       }&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${
+  //         response.razorpay_signature
+  //       }`;
 
-        const verifyResult = await verifyResponse.json();
-        console.log("response verify==", verifyResult);
-        if (verifyResult?.message == "success") {
-          setName("");
-          console.log(queryString);
-          toast.success("Payment Done successfully");
-          console.log("Onclick clicked");
-         router.push(`/paymentsuccess?${queryString}`);
-          cartItems.map((item) => removeFromCart(item.id));
-        } else {
-          console.log("Data saving failed.");
-        }
-        console.log(items);
-      },
-      prefill: {
-        name: name,
-        email: email,
-        contact: phone,
-      },
-    };
+  //       const verifyResult = await verifyResponse.json();
+  //       console.log("response verify==", verifyResult);
+  //       if (verifyResult?.message == "success") {
+  //         setName("");
+  //         console.log(queryString);
+  //         toast.success("Payment Done successfully");
+  //         console.log("Onclick clicked");
+  //        router.push(`/paymentsuccess?${queryString}`);
+  //         cartItems.map((item) => removeFromCart(item.id));
+  //       } else {
+  //         console.log("Data saving failed.");
+  //       }
+  //       console.log(items);
+  //     },
+  //     prefill: {
+  //       name: name,
+  //       email: email,
+  //       contact: phone,
+  //     },
+  //   };
 
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
+  //   const paymentObject = new window.Razorpay(options);
+  //   paymentObject.open();
 
-    paymentObject.on("payment.failed", function (response) {
-      alert("Payment failed. Please try again. Contact support for help");
-      console.log(response.razorpay_payment_id);
-      console.log(response.razorpay_order_id);
-      console.log(response.razorpay_signature);
-    });
-  };
+  //   paymentObject.on("payment.failed", function (response) {
+  //     alert("Payment failed. Please try again. Contact support for help");
+  //     console.log(response.razorpay_payment_id);
+  //     console.log(response.razorpay_order_id);
+  //     console.log(response.razorpay_signature);
+  //   });
+  // };
 
   return (
     <div className="max-w-6xl w-full mx-auto px-4 py-6 justify-start md:px-8">
@@ -294,9 +294,9 @@ export default function Checkout() {
 
             <button
               type="button"
-              onClick={() => {
-                makePayment();
-              }}
+              // onClick={() => {
+              //   makePayment();
+              // }}
               className="bg-textgray text-white w-full flex justify-center py-2 px-2 mt-2 font-MyFont text-lg font-medium md:rounded md:py-1"
             >
               <span>Place order</span>
