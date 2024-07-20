@@ -29,26 +29,8 @@ async function fetchSessionData() {
   }
 }
 
-const general_links = [
-  { name: 'Find Skilled Worker', href: '#', icon: BiSearch },
-  { name: 'Find Work', href: '#', icon: BiSearch },
-  { name: 'Login', href: '/Login', icon: CgLogIn },
-];
-const worker_links = [
-  { name: 'Find Work', href: '#', icon: BiSearch },
-  { name: 'My Jobs', href: '/Login', icon: CgLogIn },
-  { name: 'Messages', href: '#', icon: CgLogIn },
-  { name: 'Login', href: '/Login', icon: CgLogIn },
-];
-const employer_links = [
-  { name: 'Find Talents', href: '#', icon: BiSearch },
-  { name: 'My Talents', href: '/Login', icon: CgLogIn },
-  { name: 'Messages', href: '#', icon: CgLogIn },
-  { name: 'Login', href: '/Login', icon: CgLogIn },
-];
 
-
-export default function Navbar({session1}) {
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [session, setSession] = useState(null);
   const openModal = () => {
@@ -90,15 +72,6 @@ export default function Navbar({session1}) {
       window.removeEventListener("scroll", toggleShadow);
     };
   }, []);
-  const navLinks = React.useMemo(() => {
-    if (session?.user?.role === 'employer') {
-      return employer_links;
-    } else if (session?.user?.role === 'worker') {
-      return worker_links;
-    } else {
-      return general_links;
-    }
-  }, [session]);
   return (
     <div className="sticky top-0 z-20 ">
       <div className="sticky top-0 z-20 md:justify-between lg:justify-around navbar px-8 py-6 bg-primary nav-main hidden md:flex ">
@@ -107,19 +80,85 @@ export default function Navbar({session1}) {
           SkillMatch Socorro{" "}
         </Link>
         <div className=" hidden md:flex text-lg font-MyFont gap-x-8 ">
-        {navLinks.map((link) => {
-          const LinkIcon = link.icon;
-          return (
+        {session?.user?.role === 'employer' && (
+          <>
             <Link
-              key={link.name}
-              href={link.href}
+              href="#"
               className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
             >
-              <LinkIcon className="mt-1 icon-top mr-3" />
-              <p className="hidden md:block">{link.name}</p>
+              <CgLogIn className="mt-1 icon-top mr-3" />
+              <p className="hidden md:block">Find Talents</p>
             </Link>
-          );
-        })}
+            <Link
+            href="#"
+            className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+          >
+            <CgLogIn className="mt-1 icon-top mr-3" />
+            <p className="hidden md:block">My Talents</p>
+          </Link>
+        </>
+        )}
+        {session?.user?.role === 'skilled-worker' && (
+          <>
+            <Link
+              href="#"
+              className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+            >
+              <CgLogIn className="mt-1 icon-top mr-3" />
+              <p className="hidden md:block">Find Work</p>
+            </Link>
+            <Link
+            href="#"
+            className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+          >
+            <CgLogIn className="mt-1 icon-top mr-3" />
+            <p className="hidden md:block">My Work</p>
+          </Link>
+        </>
+        )}
+        {session ? (
+          <>
+            <Link
+            href="#"
+            className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+          >
+            <CgLogIn className="mt-1 icon-top mr-3" />
+            <p className="hidden md:block">Messages</p>
+          </Link>
+          <Link
+            href="/logout"
+            className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+          >
+            <CgLogIn className="mt-1 icon-top mr-3" />
+            <p className="hidden md:block">Logout</p>
+          </Link>
+          </>
+        ) : (
+          <>
+            <Link
+              href="#"
+              className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+            >
+              <CgLogIn className="mt-1 icon-top mr-3" />
+              <p className="hidden md:block">Find Work</p>
+            </Link>
+            <Link
+              href="#"
+              className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+            >
+              <CgLogIn className="mt-1 icon-top mr-3" />
+              <p className="hidden md:block">Find Talents</p>
+            </Link>
+            <Link
+              href="/login"
+              className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+            >
+              <CgLogIn className="mt-1 icon-top mr-3" />
+              <p className="hidden md:block">Login</p>
+            </Link>
+          </>
+        )}
+        
         </div>
       </div>
       {/*============================================================================= */}
@@ -137,13 +176,23 @@ export default function Navbar({session1}) {
             SkillMatch Socorro{" "}
           </Link>
         </div>
-        <div className="flex mt-2 gap-x-6  mr-2 md:hidden">
-          <Link href="/Login"
-           onClick={closeModal}>
-            {" "}
-            <CgLogIn className="icon-top" />
-          </Link>
-        </div>
+        {session ? (
+          <div className="flex mt-2 gap-x-6  mr-2 md:hidden">
+            <Link href="/login"
+            onClick={closeModal}>
+              {" "}
+              <CgLogIn className="icon-top" />
+            </Link>
+          </div>
+        ) : (
+          <div className="flex mt-2 gap-x-6  mr-2 md:hidden">
+            <Link href="/login"
+            onClick={closeModal}>
+              {" "}
+              <CgLogIn className="icon-top" />
+            </Link>
+          </div>
+        )}
       </div>
       {/*============================================================================= */}
       <div id="modal">
@@ -177,29 +226,35 @@ export default function Navbar({session1}) {
           <nav className="mt-8 mb-6 self-stretch">
             <div className="relative">
               <ul className="flex flex-col items-start gap-x-2 divide-y divide-gray-200 text-xl md:gap-x-4 font-MyFont">
+              {session?.user?.role === 'employer' && (
+              <>
                 <li className="flex w-full flex-col">
                   <Link
-                    href="/"
+                    href="#"
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
                     {" "}
-                    <span>Home</span>
+                    <span>Find Talents</span>
                   </Link>
                 </li>
                 <li className="flex w-full flex-col">
                   <Link
-                    href="/"
+                    href="#"
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
                     {" "}
-                    <span>Find Skilled Worker</span>
+                    <span>My Talents</span>
                   </Link>
                 </li>
+              </>
+              )}
+              {session?.user?.role === 'skilled-worker' && (
+              <>
                 <li className="flex w-full flex-col">
                   <Link
-                    href="/"
+                    href="#"
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
@@ -209,15 +264,73 @@ export default function Navbar({session1}) {
                 </li>
                 <li className="flex w-full flex-col">
                   <Link
-                    href="/Login"
+                    href="#"
+                    onClick={closeModal}
+                    className="flex items-center gap-x-2 py-1 px-2 text-xl"
+                  >
+                    {" "}
+                    <span>My Work</span>
+                  </Link>
+                </li>
+              </>
+              )}
+              {session ? (
+                <>
+                <li className="flex w-full flex-col">
+                  <Link
+                    href="#"
+                    onClick={closeModal}
+                    className="flex items-center gap-x-2 py-1 px-2 text-xl"
+                  >
+                    {" "}
+                    <span>Messages</span>
+                  </Link>
+                </li>
+                <li className="flex w-full flex-col">
+                  <Link
+                    href="/logout"
+                    onClick={closeModal}
+                    className="flex items-center gap-x-2 py-1 px-2 text-xl"
+                  >
+                    {" "}
+                    <span>Logout</span>
+                  </Link>
+                </li>
+                </>
+              ) : (
+              <>
+                <li className="flex w-full flex-col">
+                  <Link
+                    href="#"
+                    onClick={closeModal}
+                    className="flex items-center gap-x-2 py-1 px-2 text-xl"
+                  >
+                    {" "}
+                    <span>Find Work</span>
+                  </Link>
+                </li>
+                <li className="flex w-full flex-col">
+                  <Link
+                    href="#"
+                    onClick={closeModal}
+                    className="flex items-center gap-x-2 py-1 px-2 text-xl"
+                  >
+                    {" "}
+                    <span>Find Talents</span>
+                  </Link>
+                </li>
+                <li className="flex w-full flex-col">
+                  <Link
+                    href="/login"
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
                     {" "}
                     <span>Login</span>
-                    <CgLogIn className="opacity-90" />
                   </Link>
                 </li>
+              </>
+              )}
                 <li className="flex w-full flex-col">
                   <Link
                     href="/About"

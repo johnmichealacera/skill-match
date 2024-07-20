@@ -52,11 +52,9 @@ export default function LoginForm() {
         cookie.set('token',res2.token, { expires: 30 * 24 * 60 * 60,})
         cookie.set('user',res2.user)
         toast.success("Login successfully");
-        router.push('/Dashboard')
+        router.push('/');
+        window.location.reload();
      }
-
-    
-      // router.replace("Dashboard");
     } catch (error) {
       console.log(error.message);
     }

@@ -1,14 +1,17 @@
 import React from 'react';
-import UserInfo from "@/components/UserInfo";
-
+import LoginForm from "@/components/LoginForm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 
-export default async function Dashboard() {
+export default async function Login() {
   const session = await getServerSession(authOptions);
 
-  if (!session) redirect("/Login");
+  if (session) redirect("/dashboard");
 
-  return <UserInfo />;
+  return (
+    <main>
+      <LoginForm />
+    </main>
+  );
 }

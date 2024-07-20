@@ -31,7 +31,6 @@ export async function POST(req) {
       
         await wishlist.save();
       }
-      console.log(items);
  
 
     return NextResponse.json(

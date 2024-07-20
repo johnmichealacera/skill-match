@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {AuthProvider} from "@/components/Provider";
 import { Quicksand, Fraunces } from "next/font/google";
-import Script from 'next/script'
+import Script from 'next/script';
 
 const quicksand = Quicksand({
   subsets: ["latin"],

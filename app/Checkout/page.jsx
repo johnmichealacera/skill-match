@@ -24,7 +24,6 @@ export default function Checkout() {
 
     try {
       setItems(cartItems);
-      console.log("items " + items);
       const total = calculateTotalPrice();
       const res = await fetch("api/cart", {
         method: "POST",
@@ -41,26 +40,20 @@ export default function Checkout() {
           total: total,
         }),
       });
-      // console.log("cartitems",cartItemss);
-      // console.log("items", cartitems);
       if (res.ok) {
         setName("");
 
         toast.success("Payment Done successfully");
-        console.log(totalpricevalue);
         router.push("/");
       } else {
         console.log("data saving failed.");
       }
     } catch (error) {
-      console.log("Error during saving data into cart: ", error);
+      console.error("Error during saving data into cart: ", error);
     }
   };
   const makePayment = async () => {
     const token = Cookies.get("token"); // Get the token from cookies
-    console.log("Token inside chectoutjs " + token);
-    // const { token } = parseCookies();
-    // console.log("Token inside chectoutjs " + token);
     setItems(cartItems);
     const total = calculateTotalPrice();
 

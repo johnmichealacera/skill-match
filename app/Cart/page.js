@@ -7,7 +7,7 @@ import Cart from "@/components/Cart";
 export default async function Cartpage() {
   const session = await getServerSession(authOptions);
 
-  if (!session) redirect("/Login");
+  if (!session) redirect("/login");
 
   return <Cart />;
 }

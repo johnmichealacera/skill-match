@@ -7,7 +7,7 @@ import Wishlist from "@/components/Wishlist";
 export default async function wishlistpage() {
   const session = await getServerSession(authOptions);
 
-  if (!session) redirect("/Login");
+  if (!session) redirect("/login");
 
   return <Wishlist />;
 }

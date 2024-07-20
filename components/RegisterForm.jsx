@@ -58,7 +58,7 @@ export default function RegisterForm() {
         const form = e.target;
         form.reset();
         toast.success("Registered successfully");
-        router.push("/Login");
+        router.push("/login");
       } else {
         console.log("User registration failed.");
       }
@@ -156,7 +156,7 @@ export default function RegisterForm() {
             </div>
             )}
           <div className="text-lg mt-3 flex justify-end text-right" >
-          Already have an account? <Link href={"/Login"}> <span className="underline pl-2">Login Now!</span></Link>
+          Already have an account? <Link href={"/login"}> <span className="underline pl-2">Login Now!</span></Link>
           </div>
         </form>
       </div>

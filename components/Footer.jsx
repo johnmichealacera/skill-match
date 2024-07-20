@@ -16,7 +16,7 @@ export default function Footer() {
             We are an online platform that connects skilled workers with employers. Find professionals in various trades, including carpentry, welding, masonry, and more.
             </p>
             <p className="my-1 opacity-80 font-MyFont">
-              We provide a convenient and enjoyable shopping experience while
+              We provide a convenient and enjoyable experience while
               offering competitive prices and excellent customer service.
             </p>
           </div>
@@ -115,8 +115,8 @@ export default function Footer() {
           className="copyright-notice font-MyFont mx-auto flex max-w-6xl flex-col items-center py-1 px-4 text-primary md:flex-row 
            md:justify-between md:px-8"
         >
-          <span>© Copyright Next Bookstore</span>
-          <span>
+          {/* <span>© Copyright Next Bookstore</span> */}
+          {/* <span>
             Crafted by
             <Link
               className="underline decoration-dashed underline-offset-2 hover:decoration-solid"
@@ -126,7 +126,7 @@ export default function Footer() {
               Mayank kushwaha
             </Link>
             .
-          </span>
+          </span> */}
         </div>
       </div>
     </div>
