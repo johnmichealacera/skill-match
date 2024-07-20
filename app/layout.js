@@ -48,8 +48,8 @@ export default function RootLayout({ children }) {
         </AuthProvider>
       </body>
     </html>
-    <Script src="https://checkout.razorpay.com/v1/checkout.js"
-          />
+    {/* <Script src="https://checkout.razorpay.com/v1/checkout.js"
+          /> */}
     </>
   );
 }
