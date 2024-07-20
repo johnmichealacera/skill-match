@@ -4,10 +4,10 @@ export default function Policy() {
     <div className="max-w-6xl w-full mx-auto px-4 py-6 justify-start md:px-8">
       <h1 className="font-main text-xl my-4 font-semibold mr-auto md:text-2xl ">
         {" "}
-        Privacy Policy for My-Bookstore -
+        Privacy Policy for Skill-Match -
       </h1>
       <p className="font-main text-normal my-4  mr-auto md:text-lg">
-        1. Introduction Welcome to [Your Bookstore Website].<br></br>
+        1. Introduction Welcome to [Your Skill-Match Website].<br></br>
         We value your privacy and are committed to protecting your personal
         information.<br></br>
         This Privacy Policy is designed to explain how we collect, use,

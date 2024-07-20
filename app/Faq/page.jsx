@@ -7,12 +7,12 @@ export default function Faq() {
         Frequently Asked Questions (FAQ) -
       </h1>
       <p className="font-main text-normal my-4  mr-auto md:text-lg">
-        1. What is My Bookstore
-        <br></br>Answer: My Bookstore is an online platform dedicated to
+        1. What is Skill Match
+        <br></br>Answer: Skill Match is an online platform dedicated to
         providing an extensive collection of books across genres and categories.
         <br></br>
         <br></br>
-        2. How do I search for books on My Bookstore
+        2. How do I search for skilled workers on Skill Match
         <br></br>Answer: You can search for books by using the search bar at the
         top of the page. Simply enter the book title, author, or keywords
         related to the book you're looking for.<br></br>

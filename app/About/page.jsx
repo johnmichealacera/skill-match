@@ -43,7 +43,7 @@ export default function About() {
               Whether you're a seasoned bibliophile or just starting your
               reading journey, we're here to be your trusted companions. Join us
               in celebrating the joy of reading and the boundless possibilities
-              that books bring to our lives. Welcome to My-Bookstore, where
+              that books bring to our lives. Welcome to Skill-Match, where
               literature thrives, and readers unite.
             </p>
           </section>

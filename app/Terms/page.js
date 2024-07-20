@@ -7,7 +7,7 @@ export default function Terms() {
         Terms and Conditions of Use -
       </h1>
       <p className="font-main text-normal my-4  mr-auto md:text-lg">
-        Welcome to My-Bookstore.<br></br> By accessing and using our website,
+        Welcome to Skill Match.<br></br> By accessing and using our website,
         you agree to comply with and be bound by these Terms and Conditions.
         <br></br> If you do not agree with these terms, please refrain from
         using our services.<br></br> <br></br>
