@@ -60,10 +60,10 @@ export default function RegisterForm() {
         toast.success("Registered successfully");
         router.push("/login");
       } else {
-        console.log("User registration failed.");
+        console.error("User registration failed.");
       }
     } catch (error) {
-      console.log("Error during registration: ", error.method, " " + error.message);
+      console.error("Error during registration: ", error.method, " " + error.message);
       toast.error("Registration error", error);
     }
   };

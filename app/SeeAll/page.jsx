@@ -15,23 +15,23 @@ const SeeAll = () => {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    async function fetchBooks() {
+    const fetchBooks = async () => {
       try {
-        setloading(true);
-        // Replace this with your API call to fetch books based on heading, order, and result
-        const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${heading}&orderBy=${order}&maxResults=${result}`;
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+        const resUsersByRole = await fetch("api/usersByRole", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ role: heading }),
+        });
+        const { user: data } = await resUsersByRole.json();
 
-        console.log(data);
-
-        setBooks(data.items || []);
-        setloading(false);
+        setBooks(data || []);
       } catch (error) {
         console.error("An error occurred:", error);
         setBooks([]);
       }
-    }
+    };
     fetchBooks();
   }, []);
 

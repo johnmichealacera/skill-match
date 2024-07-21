@@ -36,7 +36,7 @@ export default function Contact() {
               {" "}
               <FiFacebook href="" className="icon-bottom " />{" "}
             </Link>
-            <Link href="https://www.instagram.com/_mayank._k___/">
+            <Link href="https://www.instagram.com">
               {" "}
               <SlSocialInstagram className="icon-bottom" />{" "}
             </Link>
@@ -44,7 +44,7 @@ export default function Contact() {
               {" "}
               <PiTelegramLogo className="icon-bottom" />{" "}
             </Link>
-            <Link href="mailto:mayankkush0842@gmail.com">
+            <Link href="mailto:bgfcstudents02@gmail.com">
               {" "}
               <IoMailUnreadOutline className="icon-bottom" />
             </Link>

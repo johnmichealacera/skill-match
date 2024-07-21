@@ -30,7 +30,6 @@ export function CartProvider({ children }) {
           if (items.ok) {
             const data = await items.json();
             setCartItems(data);
-            console.log("Inside context cartitems", data);
           } else {
             console.error("Error while fetching the cart: " + items.statusText);
           }
@@ -115,15 +114,13 @@ export function CartProvider({ children }) {
 
       if (res.status === 200) {
         const res2 = await res.json();
-        console.log("After removing from cart", res2);
         setCartItems(res2.items);
         settotal(res2.total); // Update cart items specifically
-        console.log("After removing from cart itemsssss", res2.items);
       } else {
-        console.log("Error during removing data from cart:", res.statusText);
+        console.error("Error during removing data from cart:", res.statusText);
       }
     } catch (error) {
-      console.log("Error during removing data from cart:", error.message);
+      console.error("Error during removing data from cart:", error.message);
     }
   };
   const incrementQuantity = async (productId) => {
@@ -141,15 +138,13 @@ export function CartProvider({ children }) {
 
       if (res.status === 200) {
         const res2 = await res.json();
-        console.log("After removing from cart", res2);
         setCartItems(res2.items);
         settotal(res2.total); // Update cart items specifically
-        console.log("After removing from cart itemsssss", res2.items);
       } else {
-        console.log("Error during removing data from cart:", res.statusText);
+        console.error("Error during removing data from cart:", res.statusText);
       }
     } catch (error) {
-      console.log("Error during removing data from cart:", error.message);
+      console.error("Error during removing data from cart:", error.message);
     }
   };
   const decrementQuantity = async (productId) => {
@@ -167,15 +162,13 @@ export function CartProvider({ children }) {
 
       if (res.status === 200) {
         const res2 = await res.json();
-        console.log("After removing from cart", res2);
         setCartItems(res2.items);
         settotal(res2.total); // Update cart items specifically
-        console.log("After removing from cart itemsssss", res2.items);
       } else {
-        console.log("Error during removing data from cart:", res.statusText);
+        console.error("Error during removing data from cart:", res.statusText);
       }
     } catch (error) {
-      console.log("Error during removing data from cart:", error.message);
+      console.error("Error during removing data from cart:", error.message);
     }
   };
 

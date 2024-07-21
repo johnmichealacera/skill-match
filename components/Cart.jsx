@@ -20,7 +20,6 @@ export default function Cart() {
   const handleCardClick = (selfLink) => {
     window.open(selfLink, "_blank");
   };
-  console.log(cartItems);
 
   return (
     <div className="max-w-6xl w-full mx-auto px-4 py-6 justify-start md:px-8">

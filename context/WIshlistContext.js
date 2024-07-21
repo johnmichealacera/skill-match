@@ -26,7 +26,6 @@ export function WishlistProvider({ children }) {
           if (items.ok) {
             const data = await items.json();
             setWishlistItems(data);
-            console.log("Inside context wishlistitems", data);
           } else {
             console.error("Error while fetching the cart: " + items.statusText);
           }
@@ -72,7 +71,7 @@ export function WishlistProvider({ children }) {
       });
 
       if (res.ok) {
-        toast.success("Book Added To Wishlist successfully");
+        toast.success("User Added To Wishlist successfully");
         setWishlistItems(WishlistItems);
         // Update local storage
       } else {
@@ -98,18 +97,16 @@ export function WishlistProvider({ children }) {
 
       if (res.status === 200) {
         const res2 = await res.json();
-        console.log("After removing from Wishlist", res2);
         setWishlistItems(res2.items);
         settotal(res2.total); // Update Wishlist items specifically
-        console.log("After removing from Wishlist itemsssss", res2.items);
       } else {
-        console.log(
+        console.error(
           "Error during removing data from Wishlist:",
           res.statusText
         );
       }
     } catch (error) {
-      console.log("Error during removing data from Wishlist:", error.message);
+      console.error("Error during removing data from Wishlist:", error.message);
     }
   };
   // const addToWishlist = (item) => {

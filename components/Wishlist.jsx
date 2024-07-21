@@ -154,12 +154,7 @@ export default function Wishlist() {
                       quantity: 1, // Price or a default value
                       // Add more book details as needed
                     };
-                    addToCart(bookDetails);
-                    
-                   // Pass the book details to addToCart
-                    console.log("booksdetail", bookDetails);
-                    console.log("preview", item.preview);
-                    
+                    addToCart(bookDetails); 
                   }}
                   className="bg-textgray justify-center px-2 py-2 font-MyFont text-primary flex-1 rounded md:px-4 text-sm font-semibold"
                 >

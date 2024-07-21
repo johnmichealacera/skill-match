@@ -167,7 +167,7 @@ export default function AdvanceSearch() {
           <Link
             className="flex items-center font-MyFont font-medium"
             href={{
-              pathname: "/Search",
+              pathname: "/search",
             }}
           >
             Normal Search options

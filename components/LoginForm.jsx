@@ -43,12 +43,10 @@ export default function LoginForm() {
       const res2 = await res.json()
       if (res2.error || res3.error) {
         setError("Invalid Credentials");
-        console.log(error);
+        console.error(error);
         toast.error("Login error",res2.error.message,res3.error.message );
         return;
       }else{
-        console.log(res2)
-        console.log(res2.user)
         cookie.set('token',res2.token, { expires: 30 * 24 * 60 * 60,})
         cookie.set('user',res2.user)
         toast.success("Login successfully");
@@ -56,7 +54,7 @@ export default function LoginForm() {
         window.location.reload();
      }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 
@@ -127,7 +125,7 @@ export default function LoginForm() {
             </div>
           )}
           <div className="text-lg mt-3 flex justify-end text-right" >
-            Don't have an account? <Link href={"/Register"}> <span className="underline pl-2">  Register Here</span></Link>
+            Don't have an account? <Link href={"/register"}> <span className="underline pl-2">  Register Here</span></Link>
           </div>
         </div>
       </div>

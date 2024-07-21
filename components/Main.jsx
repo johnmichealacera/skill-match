@@ -44,7 +44,7 @@ export default function Main() {
             {" "}
             <PiTelegramLogo className="icon-bottom" />{" "}
           </Link>
-          <Link href="mailto:mayankkush0842@gmail.com">
+          <Link href="mailto:bgfcstudents02@gmail.com">
             {" "}
             <IoMailUnreadOutline className="icon-bottom" />
           </Link>

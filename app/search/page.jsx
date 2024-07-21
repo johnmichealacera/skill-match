@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Card from "@/components/Card";
 import { MutatingDots } from "react-loader-spinner";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 
 export default function Search() {
@@ -12,18 +13,29 @@ export default function Search() {
   const result = 40;
   const order = "relevance";
   const [books, setBooks] = useState([]);
+  const [role, setRole] = useState('');
+  const { data: session } = useSession();
+  const [error, setError] = useState("");
 
   const fetchBooks = async () => {
+    if (!role) {
+      setError("Role is necessary.");
+      return;
+    }
     try {
       setloading(true);
-      const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${searchQuery}&orderBy=${order}&maxResults=${result}`;
-      const response = await fetch(apiUrl);
-      const data = await response.json();
+      const resUsersByRole = await fetch("api/usersByRole", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ role }),
+      });
+      const { user: data } = await resUsersByRole.json();
 
-      console.log(data);
-
-      setBooks(data.items || []);
+      setBooks(data || []);
       setloading(false);
+      setError(null);
     } catch (error) {
       console.error("An error occurred:", error);
       setBooks([]);
@@ -48,15 +60,27 @@ export default function Search() {
           onKeyDown={handleSearchKeyDown}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+        {/* <div className="font-semibold border-2 rounded-lg flex align-center">Search</div> */}
+        <select
+          onChange={(e) => setRole(e.target.value)}
+          id="role"
+          name="role"
+          placeholder="Select role"
+          className="peer block rounded-md border border-gray-200 text-sm outline-2 placeholder:text-gray-500"
+        >
+          <option value="">Select role...</option>
+          <option value="employer">Employer</option>
+          <option value="skilled-worker">Skilled Worker</option>
+        </select>
         <div className="flex  border-2 border-black rounded-full gap-4 px-4 py-2 ml-2 "
          onClick={() => {
           fetchBooks();
         }}>
-        <div className="font-semibold ">Search</div>
-        <BiSearch
-          className="icon-s mt-2 "
-         
-        />
+          <div className="font-semibold ">Search</div>
+          <BiSearch
+            className="icon-s mt-2 "
+          
+          />
         </div>
       </div>
       <div className="flex float-right underline mt-2 mr-8">
@@ -85,6 +109,11 @@ export default function Search() {
         ) : (
           <Card books={books} />
         )}
+        {error && (
+            <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+              {error}
+            </div>
+          )}
       </div>
     </div>
   );

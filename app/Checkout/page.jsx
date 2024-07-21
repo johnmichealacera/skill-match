@@ -46,7 +46,7 @@ export default function Checkout() {
         toast.success("Payment Done successfully");
         router.push("/");
       } else {
-        console.log("data saving failed.");
+        console.error("data saving failed.");
       }
     } catch (error) {
       console.error("Error during saving data into cart: ", error);

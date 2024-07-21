@@ -65,10 +65,10 @@ export default function Footer() {
           <p className="mb-3 mr-4 text-sm font-MyFont opacity-80">
             Email:
             <Link
-              href="mailto:mayankkush0842@gmail.com"
+              href="mailto:bgfcstudents02@gmail.com"
               className="text-link mt-1 block font-MyFont underline decoration-dashed underline-offset-2 hover:decoration-solid "
             >
-              mayankkush0842@gmail <br className='flex md:hidden'></br>.com
+              bgfcstudents02@gmail <br className='flex md:hidden'></br>.com
             </Link>
           </p>
           <p className="mb-3 text-sm font-MyFont">
@@ -83,7 +83,7 @@ export default function Footer() {
           <p className="mb-3 text-sm font-MyFont">
             Address:
             <span className="mt-1 block font-MyFont">
-              Ahmedabad, Gujarat, INDIA
+              Socorro, Surigao Del Norte, PHILIPPINES
             </span>
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function Footer() {
               {" "}
               <PiTelegramLogo className="icon-bottom" />{" "}
             </Link>
-            <Link href="mailto:mayankkush0842@gmail.com">
+            <Link href="mailto:bgfcstudents02@gmail.com">
               {" "}
               <IoMailUnreadOutline className="icon-bottom" />
             </Link>

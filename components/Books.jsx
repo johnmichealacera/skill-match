@@ -3,30 +3,42 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Card from "@/components/Card";
 import { IoIosArrowForward } from "react-icons/io";
+import { useSession } from "next-auth/react";
+
 const Books = ({ heading, order, title, result }) => {
   const [books, setBooks] = useState([]);
+  const { data: session } = useSession();
+  const [error, setError] = useState("");
 
   const queryParams = {
     heading,
     order,
     title,
   };
+
   useEffect(() => {
-    async function fetchBooks() {
+    const fetchBooks = async () => {
+      if (!heading) {
+        setError("Heading is necessary.");
+        return;
+      }
       try {
-        const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${heading}&orderBy=${order}&maxResults=${result}`;
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+        const resUsersByRole = await fetch("api/usersByRole", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ role: heading }),
+        });
+        const { user: data } = await resUsersByRole.json();
 
-        console.log(data);
-
-        setBooks(data.items || []);
+        setBooks(data || []);
+        setError(null);
       } catch (error) {
         console.error("An error occurred:", error);
         setBooks([]);
       }
-    }
-
+    };
     fetchBooks();
   }, [heading]);
 

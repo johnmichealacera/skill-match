@@ -126,11 +126,11 @@ export default function Navbar() {
             <p className="hidden md:block">Messages</p>
           </Link>
           <Link
-            href="/logout"
+            href="/dashboard"
             className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
           >
             <CgLogIn className="mt-1 icon-top mr-3" />
-            <p className="hidden md:block">Logout</p>
+            <p className="hidden md:block">Profile</p>
           </Link>
           </>
         ) : (
@@ -288,12 +288,12 @@ export default function Navbar() {
                 </li>
                 <li className="flex w-full flex-col">
                   <Link
-                    href="/logout"
+                    href="/dashboard"
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
                     {" "}
-                    <span>Logout</span>
+                    <span>Profile</span>
                   </Link>
                 </li>
                 </>
@@ -378,7 +378,7 @@ export default function Navbar() {
               {" "}
               <PiTelegramLogo className="icon-bottom" />{" "}
             </Link>
-            <Link href="mailto:mayankkush0842@gmail.com">
+            <Link href="mailto:bgfcstudents02@gmail.com">
               {" "}
               <IoMailUnreadOutline className="icon-bottom" />
             </Link>
