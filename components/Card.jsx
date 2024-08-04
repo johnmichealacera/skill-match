@@ -38,7 +38,7 @@ function Card({ books }) {
             className="p-4 sm:p-8 md:p-4 lg:p-8 cursor-pointer bg-bggray"
           >
             <Image
-              src={book?.volumeInfo?.imageLinks?.thumbnail || "/creation1.png"}
+              src={book?.imageUrl || "/creation1.png"}
               priority="high"
               unoptimized={true} // {false} | {true}
               className="inline-block align-baseline"

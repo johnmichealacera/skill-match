@@ -14,6 +14,8 @@ export default function UserInfo() {
   const { data: session } = useSession();
   const router = useRouter();
   const [workerSkills, setWorkerSkills] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
+  const [imageUrl, setImageUrl] = useState('');
 
   const token = Cookies.get("token");
 
@@ -37,14 +39,35 @@ export default function UserInfo() {
         console.error("Error:", error);
       }
     };
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("/api/usersInfo", {
+          method:"POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body:JSON.stringify({
+            email: session?.user?.email,
+          }),
+        });
+        const data = await response.json();
+        console.log('user data', data);
+        if (data) {
+          setUserInfo(data);
+          setImageUrl(data?.imageUrl);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
 
     fetchWorkerSkills();
+    fetchUserData();
   }, [session]);
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
-  const [imageUrl, setImageUrl] = useState(session?.user?.imageUrl);
   const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL;
   const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
   const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
