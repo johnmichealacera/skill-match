@@ -34,6 +34,7 @@ export const authOptions = {
             lastName: user.lastName,
             email: user.email,
             role: user.role,  // Ensure role is included here
+            imageUrl: user.imageUrl,  // Ensure imageUrl is included here
           };
         } catch (error) {
           console.error("Error: ", error);
@@ -52,6 +53,7 @@ export const authOptions = {
       // Add user role to the token right after signin
       if (user) {
         token.role = user.role;
+        token.imageUrl = user.imageUrl;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
       }
@@ -62,6 +64,7 @@ export const authOptions = {
       // Add role value to session
       if (token) {
         session.user.role = token.role;
+        session.user.imageUrl = token.imageUrl;
         session.user.firstName = token.firstName;
         session.user.lastName = token.lastName;
       }
