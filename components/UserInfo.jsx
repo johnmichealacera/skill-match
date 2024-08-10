@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import { MdCarpenter } from "react-icons/md";
 import "jspdf-autotable";
 import Image from "next/image";
+import { handleFileChange } from "@jmacera/cloudinary-image-upload";
 
 export default function UserInfo() {
   const { data: session } = useSession();
@@ -71,23 +72,14 @@ export default function UserInfo() {
   const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL;
   const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
   const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
-  const handleFileChange = async (e) => {
+  const handleMediaChange = async (e) => {
     const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', uploadPreset);
-    formData.append('api_key', apiKey);
 
     try {
-      const response = await fetch(cloudinaryUrl, {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (data.secure_url) {
-        setImageUrl(data.secure_url);
-        await updateUserProfile(data.secure_url);
+      const imageUrl = await handleFileChange(cloudinaryUrl, uploadPreset, apiKey, file)
+      if (imageUrl) {
+        setImageUrl(imageUrl);
+        await updateUserProfile(imageUrl);
       }
     } catch (err) {
       console.error('Error uploading file:', err);
@@ -116,6 +108,21 @@ export default function UserInfo() {
       toast.error('Failed to update profile');
     }
   };
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [missingSkills, setMissingSkills] = useState([]);
+
+  // Define all available skills
+  const allSkills = ['farming', 'welding', 'carpentry', 'fishing', 'masonry', 'others'];
+
+  // Determine missing skills
+  useEffect(() => {
+    const getMissingSkills = () => {
+      const missing = allSkills.filter(skill => !workerSkills.includes(skill));
+      setMissingSkills(missing);
+    };
+
+    getMissingSkills();
+  }, [workerSkills]);
 
   return (
     <div className="max-w-6xl w-full mx-auto px-4 py-6 justify-start md:px-8">
@@ -185,16 +192,16 @@ export default function UserInfo() {
                 type="file"
                 accept="image/*"
                 ref={fileInputRef}
-                onChange={handleFileChange}
+                onChange={handleMediaChange}
                 className="hidden"
               />
             </div>
         </div>
       </div>
-      { session?.user?.role === 'skilled-worker' && (
+      {session?.user?.role === 'skilled-worker' && (
         <>
-          <div className="flex pb-8 md:pb-0 md:pr-10 xl:pr-20 font-main text-xl md:text-3xl mt-8 ">
-          Worker Skill Set
+          <div className="flex pb-8 md:pb-0 md:pr-10 xl:pr-20 font-main text-xl md:text-3xl mt-8">
+            Worker Skill Set
           </div>
           {workerSkills.map((skill, index) => (
             <div key={index} className="bg-white shadow-md rounded-lg p-6 mb-4">
@@ -202,6 +209,32 @@ export default function UserInfo() {
               <MdCarpenter className="ml-2" />
             </div>
           ))}
+          <button
+            onClick={() => setShowDropdown(!showDropdown)}
+            className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+          >
+            Add Skill Set
+          </button>
+          {showDropdown && (
+            <div className="bg-white shadow-md rounded-lg p-4 mt-2">
+              <h3 className="text-lg font-bold mb-2">Available Skills</h3>
+              <ul>
+                {missingSkills.map((skill, index) => (
+                  <li key={index} className="py-1">
+                    <button
+                      onClick={() => {
+                        // Handle skill addition here
+                        // e.g., addSkill(skill);
+                      }}
+                      className="text-blue-500"
+                    >
+                      {skill}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </>
       )}
     </div>

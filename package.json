@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@formspree/react": "^2.5.1",
+    "@jmacera/cloudinary-image-upload": "npm:@jsr/jmacera__cloudinary-image-upload@^0.1.2",
     "@netlify/plugin-nextjs": "^4.40.1",
     "@reduxjs/toolkit": "^1.9.7",
     "@stripe/stripe-js": "^1.54.2",
