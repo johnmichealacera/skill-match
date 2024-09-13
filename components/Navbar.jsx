@@ -75,7 +75,7 @@ export default function Navbar() {
   return (
     <div className="sticky top-0 z-20 ">
       <div className="sticky top-0 z-20 md:justify-between lg:justify-around navbar px-8 py-6 bg-primary nav-main hidden md:flex ">
-        <Link className="font-main text-3xl font-semibold md:flex" href="/">
+        <Link className="font-main text-5xl font-semibold md:flex" href="/">
           {" "}
           Online Skilled Worker Booking System for Socorro{" "}
         </Link>
@@ -169,7 +169,7 @@ export default function Navbar() {
         </div>
         <div className="flex  md:hidden">
           <Link
-            className="font-main text-2xl font-semibold md:text-3xl"
+            className="font-main text-5xl font-semibold md:text-3xl"
             href="/"
           >
             {" "}
@@ -214,7 +214,7 @@ export default function Navbar() {
           <div className="flex flex-col items-center justify-center gap-2 gap-x-4">
             <Link
               href="/"
-              className="font-main text-2xl font-medium"
+              className="font-main text-5xl font-medium"
               onClick={closeModal}
             >
               Online Skilled Worker Booking System for Socorro

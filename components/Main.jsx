@@ -25,7 +25,7 @@ export default function Main() {
         />
       </div>
       <div className="info-wrapper flex flex-1 flex-col gap-y-4 md:justify-center lg:justify-end lg:gap-y-8">
-        <h1 className="font-main text-4xl font-semibold md:!leading-tight lg:text-5xl xl:text-6xl opacity-80 ">
+        <h1 className="font-main text-2xl font-semibold md:!leading-tight lg:text-4xl xl:text-5xl opacity-80 ">
           {" "}
           Best Place to Find <br></br> Skilled <br></br> Workers.
         </h1>
