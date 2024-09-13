@@ -77,7 +77,7 @@ export default function Navbar() {
       <div className="sticky top-0 z-20 md:justify-between lg:justify-around navbar px-8 py-6 bg-primary nav-main hidden md:flex ">
         <Link className="font-main text-3xl font-semibold md:flex" href="/">
           {" "}
-          SkillMatch Socorro{" "}
+          Online Skilled Workers in Socorro{" "}
         </Link>
         <div className=" hidden md:flex text-lg font-MyFont gap-x-8 ">
         {session?.user?.role === 'employer' && (
@@ -173,7 +173,7 @@ export default function Navbar() {
             href="/"
           >
             {" "}
-            SkillMatch Socorro{" "}
+            Online Skilled Workers in Socorro{" "}
           </Link>
         </div>
         {session ? (
@@ -217,7 +217,7 @@ export default function Navbar() {
               className="font-main text-2xl font-medium"
               onClick={closeModal}
             >
-              SkillMatch Socorro
+              Online Skilled Workers in Socorro
             </Link>
             <p className="text-center px-6 font-MyFont">
               Your one-stop solution for hiring skilled workers or finding the perfect job.
