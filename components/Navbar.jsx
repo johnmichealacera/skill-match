@@ -1,13 +1,9 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { BiSearch } from "react-icons/bi";
 import {
-  AiOutlineUser,
-  AiOutlineShoppingCart,
   AiOutlineClose,
 } from "react-icons/ai";
-import { FaRegHeart } from "react-icons/fa";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { IoMailUnreadOutline } from "react-icons/io5";
 import { PiTelegramLogo } from "react-icons/pi";

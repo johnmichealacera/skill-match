@@ -62,7 +62,7 @@ export default function UserInfo() {
           const filteredMissingSkills = availableSkillSets.filter(
             (skill) => !data?.skillSets?.includes(skill)
           );
-          
+          // TODO: Optimize this code
           // Set missing skills as available options to add
           setMissingSkillSets(filteredMissingSkills);
         }
@@ -70,12 +70,9 @@ export default function UserInfo() {
         console.error("Error:", error);
       }
     };
-  
     fetchWorkerSkills();
     fetchUserData();
-    
   }, [session]);
-  
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
     fileInputRef.current.click();

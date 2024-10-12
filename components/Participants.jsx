@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Card from "@/components/Card";
+import Card from "../components/Card";
 import { IoIosArrowForward } from "react-icons/io";
 import { useSession } from "next-auth/react";
 
-const Books = ({ heading, order, title, result }) => {
-  const [books, setBooks] = useState([]);
+export default function Participants ({ heading, order, title, result }) {
+  const [participants, setParticipants] = useState([]);
   const { data: session } = useSession();
   const [error, setError] = useState("");
 
@@ -17,7 +17,7 @@ const Books = ({ heading, order, title, result }) => {
   };
 
   useEffect(() => {
-    const fetchBooks = async () => {
+    const fetchParticipants = async () => {
       if (!heading) {
         setError("Heading is necessary.");
         return;
@@ -32,14 +32,14 @@ const Books = ({ heading, order, title, result }) => {
         });
         const { user: data } = await resUsersByRole.json();
 
-        setBooks(data || []);
+        setParticipants(data || []);
         setError(null);
       } catch (error) {
         console.error("An error occurred:", error);
-        setBooks([]);
+        setParticipants([]);
       }
     };
-    fetchBooks();
+    fetchParticipants();
   }, [heading]);
 
   return (
@@ -61,7 +61,7 @@ const Books = ({ heading, order, title, result }) => {
           </Link>
         </div>
 
-        <Card books={books} />
+        <Card participants={participants} />
 
         <div className="mt-8 flex items-center justify-center md:hidden">
           <Link
@@ -79,5 +79,3 @@ const Books = ({ heading, order, title, result }) => {
     </div>
   );
 };
-
-export default Books;

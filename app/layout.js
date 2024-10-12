@@ -3,13 +3,12 @@ import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WIshlistContext";
 import { Analytics } from '@vercel/analytics/react';
-import Topheader from '@/components/Topheader';
+import Topheader from '../components/Topheader';
 import { Toaster } from "react-hot-toast";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import {AuthProvider} from "@/components/Provider";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import {AuthProvider} from "../components/Provider";
 import { Quicksand, Fraunces } from "next/font/google";
-import Script from 'next/script';
 
 const quicksand = Quicksand({
   subsets: ["latin"],
