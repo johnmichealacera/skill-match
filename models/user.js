@@ -15,6 +15,16 @@ const userSchema = new Schema(
       required: true,
       unique:true,
     },
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique:true,
+    },
+    homeAddress: {
+      type: String,
+      required: true,
+      unique:true,
+    },
     password: {
       type: String,
       required: true,
@@ -25,6 +35,10 @@ const userSchema = new Schema(
     },
     imageUrl: {
       type: String,
+      required: false,
+    },
+    skillSets: {
+      type: Array,
       required: false,
     },
   },

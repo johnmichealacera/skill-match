@@ -1,13 +1,13 @@
 import { connectMongoDB } from "@/lib/mongodb";
-import User from "@/models/user";
+import SkillSet from "@/models/skillSet";
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
+export async function GET() {
   try {
     await connectMongoDB();
-    const { email } = await req.json();
-    const user = await User.findOne({ email });
-    return NextResponse.json({ user });
+    const skillSet = await SkillSet.findOne({ name: 'skillSet'});
+
+    return NextResponse.json(skillSet);
   } catch (error) {
     console.error(error);
   }

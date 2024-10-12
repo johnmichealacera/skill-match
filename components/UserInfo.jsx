@@ -15,6 +15,8 @@ export default function UserInfo() {
   const { data: session } = useSession();
   const router = useRouter();
   const [workerSkills, setWorkerSkills] = useState([]);
+  const [availableSkillSets, setAvailableSkillSets] = useState([]);
+  const [missingSkillSets, setMissingSkillSets] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [imageUrl, setImageUrl] = useState('');
 
@@ -24,47 +26,56 @@ export default function UserInfo() {
     const fetchWorkerSkills = async () => {
       try {
         const response = await fetch("/api/workerskills", {
-          method:"POST",
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          body:JSON.stringify({
-            email: session?.user?.email,
-          }),
         });
         const data = await response.json();
-        if (data.user?.skills?.length > 0) {
-          setWorkerSkills(data.user?.skills);
+        
+        if (data?.skills?.length > 0) {
+          setAvailableSkillSets(data?.skills);
         }
       } catch (error) {
         console.error("Error:", error);
       }
     };
+  
     const fetchUserData = async () => {
       try {
         const response = await fetch("/api/usersInfo", {
-          method:"POST",
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          body:JSON.stringify({
+          body: JSON.stringify({
             email: session?.user?.email,
           }),
         });
         const data = await response.json();
-        console.log('user data', data);
         if (data) {
           setUserInfo(data);
           setImageUrl(data?.imageUrl);
+          setWorkerSkills(data?.skillSets);
+
+          // Now filter out skills that the user already has
+          const filteredMissingSkills = availableSkillSets.filter(
+            (skill) => !data?.skillSets?.includes(skill)
+          );
+          
+          // Set missing skills as available options to add
+          setMissingSkillSets(filteredMissingSkills);
         }
       } catch (error) {
         console.error("Error:", error);
       }
     };
-
+  
     fetchWorkerSkills();
     fetchUserData();
+    
   }, [session]);
+  
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -108,21 +119,39 @@ export default function UserInfo() {
       toast.error('Failed to update profile');
     }
   };
+  const addSkillSet = (skillSet) => {
+    try {
+      setMissingSkillSets(missingSkillSets.filter((missingSkillSet) => missingSkillSet !== skillSet));
+      setWorkerSkills([...workerSkills, skillSet]);
+    } catch (err) {
+      console.error('Error setting skill set:', skillSet);
+    }
+  };
+  const updateUserSkillSets = async () => {
+    try {
+      const response = await fetch('/api/updateSkillSet', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: session?.user?.email,
+          skillSets: workerSkills,
+        }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        // Trigger a rerender if necessary
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.error('Error updating user skill set:', error);
+      toast.error('Failed to update user skill set');
+    }
+  };
   const [showDropdown, setShowDropdown] = useState(false);
-  const [missingSkills, setMissingSkills] = useState([]);
-
-  // Define all available skills
-  const allSkills = ['farming', 'welding', 'carpentry', 'fishing', 'masonry', 'others'];
-
-  // Determine missing skills
-  useEffect(() => {
-    const getMissingSkills = () => {
-      const missing = allSkills.filter(skill => !workerSkills.includes(skill));
-      setMissingSkills(missing);
-    };
-
-    getMissingSkills();
-  }, [workerSkills]);
 
   return (
     <div className="max-w-6xl w-full mx-auto px-4 py-6 justify-start md:px-8">
@@ -206,9 +235,21 @@ export default function UserInfo() {
           {workerSkills.map((skill, index) => (
             <div key={index} className="bg-white shadow-md rounded-lg p-6 mb-4">
               <h2 className="text-xl font-bold mb-2">{skill}</h2>
-              <MdCarpenter className="ml-2" />
+              <img 
+                src={`/icons/${skill}.png`}
+                alt={`${skill} Icon`}
+                width={50} 
+                height={50} 
+              />
             </div>
           ))}
+          <button
+            onClick={() => updateUserSkillSets()}
+            className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+          >
+            Save
+          </button>
+          <br />
           <button
             onClick={() => setShowDropdown(!showDropdown)}
             className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
@@ -219,12 +260,11 @@ export default function UserInfo() {
             <div className="bg-white shadow-md rounded-lg p-4 mt-2">
               <h3 className="text-lg font-bold mb-2">Available Skills</h3>
               <ul>
-                {missingSkills.map((skill, index) => (
+                {missingSkillSets.map((skill, index) => (
                   <li key={index} className="py-1">
                     <button
                       onClick={() => {
-                        // Handle skill addition here
-                        // e.g., addSkill(skill);
+                        addSkillSet(skill);
                       }}
                       className="text-blue-500"
                     >

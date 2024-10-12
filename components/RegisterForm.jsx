@@ -10,6 +10,8 @@ export default function RegisterForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [homeAddress, setHomeAddress] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
@@ -49,6 +51,8 @@ export default function RegisterForm() {
           firstName,
           lastName,
           email,
+          phoneNumber,
+          homeAddress,
           password,
           role,
         }),
@@ -116,6 +120,30 @@ export default function RegisterForm() {
                 className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
                 type="email"
                 name="email"
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
+              Phone Number
+              <input
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="Enter Your Phone Number"
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="text"
+                name="phone-number"
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
+              Home Address
+              <input
+                onChange={(e) => setHomeAddress(e.target.value)}
+                placeholder="Enter Your Home Address"
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="text"
+                name="home-address"
               />
             </label>
           </div>
