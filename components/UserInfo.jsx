@@ -23,56 +23,55 @@ export default function UserInfo() {
   const token = Cookies.get("token");
 
   useEffect(() => {
-    const fetchWorkerSkills = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("/api/workerskills", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        
-        if (data?.skills?.length > 0) {
-          setAvailableSkillSets(data?.skills);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-  
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch("/api/usersInfo", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            email: session?.user?.email,
+        // Fetch both the worker skills and user data in parallel
+        const [workerSkillsResponse, userDataResponse] = await Promise.all([
+          fetch("/api/workerskills", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }),
-        });
-        const data = await response.json();
-        if (data) {
-          setUserInfo(data);
-          setImageUrl(data?.imageUrl);
-          setWorkerSkills(data?.skillSets);
+          fetch("/api/usersInfo", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              email: session?.user?.email,
+            }),
+          }),
+        ]);
 
-          // Now filter out skills that the user already has
-          const filteredMissingSkills = availableSkillSets.filter(
-            (skill) => !data?.skillSets?.includes(skill)
+        const workerSkillsData = await workerSkillsResponse.json();
+        const userData = await userDataResponse.json();
+
+        if (workerSkillsData?.skills?.length > 0) {
+          setAvailableSkillSets(workerSkillsData?.skills);
+        }
+
+        if (userData) {
+          setUserInfo(userData);
+          setImageUrl(userData?.imageUrl);
+          setWorkerSkills(userData?.skillSets);
+
+          // Only filter missing skills once both available skills and user skills are fetched
+          const filteredMissingSkills = workerSkillsData?.skills.filter(
+            (skill) => !userData?.skillSets?.includes(skill)
           );
-          // TODO: Optimize this code
-          // Set missing skills as available options to add
+
           setMissingSkillSets(filteredMissingSkills);
         }
       } catch (error) {
         console.error("Error:", error);
       }
     };
-    fetchWorkerSkills();
-    fetchUserData();
-  }, [session]);
+
+    // Fetch both data sets concurrently
+    fetchData();
+  }, [session, token]);
+
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
     fileInputRef.current.click();
