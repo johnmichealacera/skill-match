@@ -6,7 +6,7 @@
     },
     "globals": {
         "process": true
-      },
+    },
     "extends": [
         "next",
         "eslint:recommended",

@@ -15,7 +15,7 @@ function Card({ participants }) {
   useEffect(() => {
     if (WishlistItems && WishlistItems.length > 0) {
       // Set the liked state based on the items in the wishlist
-      setLiked(WishlistItems.map((item) => item.id));
+      setLiked(WishlistItems?.map((item) => item.id));
     } else {
       // Handle the case when WishlistItems is empty
       // You can set liked to an empty array or take any other appropriate action
@@ -29,7 +29,7 @@ function Card({ participants }) {
 
   return (
     <div className="grid grid-cols-2 gap-4 py-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-      {participants.map((participant, index) => (
+      {participants?.map((participant, index) => (
         <div
           key={index}
           className="flex flex-col justify-between rounded border-2 border-bggray align-baseline"
@@ -61,7 +61,6 @@ function Card({ participants }) {
             <div className="mb-2 md:line-clamp-1">
               <h3 className="text-base font-MyFont">{participant?.homeAddress}</h3>
             </div>
-            
             <div className="flex w-max justify-between">
               <div className="cursor-pointer pt-4 px-1">
                 <button
