@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function UserProfileById({ id }) {
   const [workerSkills, setWorkerSkills] = useState([]);
@@ -60,13 +61,25 @@ export default function UserProfileById({ id }) {
               {userInfo?.email}
             </span>
           </div>
+          <div className="font-main">
+          Phone Number:
+          <span className="font-bold font-MyFont pl-3">
+            {userInfo?.phoneNumber}
+          </span>
+        </div>
+        <div className="font-main">
+          Home Address:
+          <span className="font-bold font-MyFont pl-3">
+            {userInfo.homeAddress}
+          </span>
+        </div>
           <div className="content py-4 flex flex-col justify-between">
-            <button
+            {/* <button
               // onClick={handleButtonClick}
               className="bg-textgray justify-center px-2 py-2 font-MyFont text-primary flex-1 rounded md:px-4 text-sm font-semibold"
             >
               Message
-            </button>
+            </button> */}
           </div>
         </div>
         <div
@@ -96,15 +109,17 @@ export default function UserProfileById({ id }) {
             Worker Skill Set
           </div>
           {workerSkills.map((skill, index) => (
-            <div key={index} className="bg-white shadow-md rounded-lg p-6 mb-4">
-              <h2 className="text-xl font-bold mb-2">{skill}</h2>
-              <img
-                src={`/icons/${skill}.png`}
-                alt={`${skill} Icon`}
-                width={50}
-                height={50}
-              />
-            </div>
+            <Link href={`/SkillWorkers/${encodeURIComponent(skill)}/view`}>
+              <div key={index} className="bg-white shadow-md rounded-lg p-6 mb-4">
+                <h2 className="text-xl font-bold mb-2">{skill}</h2>
+                <img
+                  src={`/icons/${skill}.png`}
+                  alt={`${skill} Icon`}
+                  width={50}
+                  height={50}
+                />
+              </div>
+            </Link>
           ))}
         </>
       )}

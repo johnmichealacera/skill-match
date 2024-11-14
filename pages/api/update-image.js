@@ -1,14 +1,21 @@
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getServerSession } from 'next-auth/next';
 import { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/user";
 
 export default async (req, res) => {
-  const { newEmail, email, firstName, lastName, phoneNumber, homeAddress } = req.body;
+  const session = await getServerSession(req, res, authOptions);
+
+  if (!session) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const { email, imageUrl } = req.body;
 
   try {
     await connectMongoDB();
-
-    const result = await User.updateOne({ email },
-      { $set: { email: newEmail, firstName, lastName, phoneNumber, homeAddress } });
+    const result = await User.updateOne({ email: email },
+      { $set: { imageUrl } });
 
     if (result.modifiedCount === 0) {
       return res.status(404).json({ message: 'User not found' });

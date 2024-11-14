@@ -30,15 +30,17 @@ export default function RootLayout({ children }) {
     <>
     <html lang="en" className={`${quicksand.variable} ${fraunces.variable}`}>
       {/* <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
       </head> */}
-      <body suppressHydrationWarning={true} className="flex flex-col min-h-screen w-full bg-primary">
+      <body
+          suppressHydrationWarning={true}
+          className="flex flex-col min-h-screen w-full background-image"
+        >
       <AuthProvider>
       <Toaster/>
       <Topheader/>
       <CartProvider>
       <WishlistProvider>
-       <Navbar />
+      <Navbar />
         {children}
         <Analytics />
         </WishlistProvider>

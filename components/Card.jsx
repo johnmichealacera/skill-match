@@ -61,7 +61,7 @@ function Card({ participants }) {
             <div className="mb-2 md:line-clamp-1">
               <h3 className="text-base font-MyFont">{participant?.homeAddress}</h3>
             </div>
-            <div className="flex w-max justify-between">
+            {/* <div className="flex w-max justify-between">
               <div className="cursor-pointer pt-4 px-1">
                 <button
                   onClick={() => {
@@ -107,7 +107,7 @@ function Card({ participants }) {
                   )}
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       ))}

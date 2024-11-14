@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import cookie2 from "js-cookie";
 import Cookies from "js-cookie";
-import { MdCarpenter } from "react-icons/md";
 import "jspdf-autotable";
 import Image from "next/image";
 import { handleFileChange } from "@jmacera/cloudinary-image-upload";
+import Link from "next/link";
 
 export default function UserInfo() {
   const { data: session } = useSession();
@@ -86,15 +86,15 @@ export default function UserInfo() {
       const imageUrl = await handleFileChange(cloudinaryUrl, uploadPreset, apiKey, file)
       if (imageUrl) {
         setImageUrl(imageUrl);
-        await updateUserProfile(imageUrl);
+        await updateUserImage(imageUrl);
       }
     } catch (err) {
       console.error('Error uploading file:', err);
     }
   };
-  const updateUserProfile = async (url) => {
+  const updateUserImage = async (url) => {
     try {
-      const response = await fetch('/api/update-profile', {
+      const response = await fetch('/api/update-image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -148,6 +148,55 @@ export default function UserInfo() {
     }
   };
   const [showDropdown, setShowDropdown] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [userData, setUserData] = useState({
+    lastName: session?.user?.lastName || "",
+    firstName: session?.user?.firstName || "",
+    email: session?.user?.email || "",
+    phoneNumber: session?.user?.phoneNumber || "",
+    homeAddress: session?.user?.homeAddress || ""
+  });
+
+  const handleEditToggle = () => {
+    setEditMode((prevMode) => !prevMode);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserInfo({ ...userInfo, [name]: value });
+  };
+
+  const updateUserInfo = async () => {
+    try {
+      const { email, firstName, lastName, phoneNumber, homeAddress } = userInfo;
+      const response = await fetch('/api/update-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: session?.user?.email,
+          newEmail: email,
+          firstName, lastName, phoneNumber, homeAddress,
+        }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile');
+    }
+  };
+
+  const handleSave = async () => {
+    // Save changes logic (API call or state update)
+    setEditMode(false);
+    await updateUserInfo();
+  };
 
   return (
     <div className="max-w-6xl w-full mx-auto px-4 py-6 justify-start md:px-8">
@@ -155,25 +204,103 @@ export default function UserInfo() {
         Welcome to Online Skilled Worker Booking System for Socorro
       </div>
       <div className="grid grid-cols-2 gap-4 py-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-2 lg:gap-6 w-full">
-        <div className="shadow-lg p-8 bg-zince-300/10 flex flex-col  text-md gap-2 my-6">
-          <div className="font-main ">
-            Last Name:{" "}
-            <span className="font-bold font-MyFont pl-3">
-              {session?.user?.lastName}
-            </span>
-          </div>
-          <div className="font-main ">
-            First Name:{" "}
-            <span className="font-bold font-MyFont pl-3">
-              {session?.user?.firstName}
-            </span>
-          </div>
-          <div className="font-main">
-            Email:{" "}
-            <span className="font-bold font-MyFont pl-3">
-              {session?.user?.email}
-            </span>
-          </div>
+      <div className="shadow-lg p-8 bg-zince-300/10 flex flex-col text-md gap-2 my-6">
+        <div className="font-main">
+          Last Name:
+          <span className="font-bold font-MyFont pl-3">
+            {editMode ? (
+              <input
+                type="text"
+                name="lastName"
+                value={userInfo?.lastName}
+                onChange={handleInputChange}
+                className="border-b border-gray-300 focus:outline-none"
+              />
+            ) : (
+              userInfo?.lastName
+            )}
+          </span>
+        </div>
+        <div className="font-main">
+          First Name:
+          <span className="font-bold font-MyFont pl-3">
+            {editMode ? (
+              <input
+                type="text"
+                name="firstName"
+                value={userInfo.firstName}
+                onChange={handleInputChange}
+                className="border-b border-gray-300 focus:outline-none"
+              />
+            ) : (
+              userInfo.firstName
+            )}
+          </span>
+        </div>
+        <div className="font-main">
+          Email:
+          <span className="font-bold font-MyFont pl-3">
+            {editMode ? (
+              <input
+                type="email"
+                name="email"
+                value={userInfo.email}
+                onChange={handleInputChange}
+                className="border-b border-gray-300 focus:outline-none"
+              />
+            ) : (
+              userInfo.email
+            )}
+          </span>
+        </div>
+        <div className="font-main">
+          Phone Number:
+          <span className="font-bold font-MyFont pl-3">
+            {editMode ? (
+              <input
+                type="text"
+                name="phoneNumber"
+                value={userInfo.phoneNumber}
+                onChange={handleInputChange}
+                className="border-b border-gray-300 focus:outline-none"
+              />
+            ) : (
+              userInfo.phoneNumber
+            )}
+          </span>
+        </div>
+        <div className="font-main">
+          Home Address:
+          <span className="font-bold font-MyFont pl-3">
+            {editMode ? (
+              <input
+                type="text"
+                name="homeAddress"
+                value={userInfo.homeAddress}
+                onChange={handleInputChange}
+                className="border-b border-gray-300 focus:outline-none"
+              />
+            ) : (
+              userInfo.homeAddress
+            )}
+          </span>
+        </div>
+        <div className="flex justify-around">
+          {editMode ? (
+            <button
+              onClick={handleSave}
+              className="bg-green-500 text-white w-[150px] font-bold px-6 py-2 mt-3"
+            >
+              Save
+            </button>
+          ) : (
+            <button
+              onClick={handleEditToggle}
+              className="bg-blue-500 text-white w-[150px] font-bold px-6 py-2 mt-3"
+            >
+              Update
+            </button>
+          )}
           <button
             onClick={() => {
               toast.success("Logout successfully");
@@ -187,6 +314,7 @@ export default function UserInfo() {
             Log Out
           </button>
         </div>
+      </div>
         <div
             className="flex flex-col justify-between rounded border-2 border-bggray align-baseline"
           >
@@ -229,15 +357,17 @@ export default function UserInfo() {
             Worker Skill Set
           </div>
           {workerSkills.map((skill, index) => (
-            <div key={index} className="bg-white shadow-md rounded-lg p-6 mb-4">
-              <h2 className="text-xl font-bold mb-2">{skill}</h2>
-              <img 
-                src={`/icons/${skill}.png`}
-                alt={`${skill} Icon`}
-                width={50} 
-                height={50} 
-              />
-            </div>
+            <Link href={`/SkillWorkers/${encodeURIComponent(skill)}/view`}>
+              <div key={index} className="bg-white shadow-md rounded-lg p-6 mb-4">
+                <h2 className="text-xl font-bold mb-2">{skill}</h2>
+                <img
+                  src={`/icons/${skill}.png`}
+                  alt={`${skill} Icon`}
+                  width={50}
+                  height={50}
+                />
+              </div>
+            </Link>
           ))}
           <button
             onClick={() => updateUserSkillSets()}
