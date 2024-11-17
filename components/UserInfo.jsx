@@ -282,22 +282,6 @@ export default function UserInfo() {
           </span>
         </div>
         <div className="font-main">
-          Daily Rate:
-          <span className="font-bold font-MyFont pl-3">
-            {editMode ? (
-              <input
-                type="text"
-                name="dailyRate"
-                value={userInfo.dailyRate}
-                onChange={handleInputChange}
-                className="border-b border-gray-300 focus:outline-none"
-              />
-            ) : (
-              userInfo.dailyRate
-            )}
-          </span>
-        </div>
-        <div className="font-main">
           Birth Date:
           <span className="font-bold font-MyFont pl-3">
             {editMode ? (
@@ -313,6 +297,24 @@ export default function UserInfo() {
             )}
           </span>
         </div>
+        {session?.user?.role === 'skilled-worker' && (
+          <div className="font-main">
+            Daily Rate:
+            <span className="font-bold font-MyFont pl-3">
+              {editMode ? (
+                <input
+                  type="text"
+                  name="dailyRate"
+                  value={userInfo.dailyRate}
+                  onChange={handleInputChange}
+                  className="border-b border-gray-300 focus:outline-none"
+                />
+              ) : (
+                userInfo.dailyRate
+              )}
+            </span>
+          </div>
+        )}
         <div className="flex justify-around">
           {editMode ? (
             <button

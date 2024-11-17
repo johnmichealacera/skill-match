@@ -79,12 +79,14 @@ export default function UserProfileById({ id }) {
             {userInfo.birthDate}
           </span>
         </div>
-        <div className="font-main">
-          Daily Rate:
-          <span className="font-bold font-MyFont pl-3">
-            {userInfo.dailyRate}
-          </span>
-        </div>
+        {userInfo?.role === 'skilled-worker' && (
+          <div className="font-main">
+            Daily Rate:
+            <span className="font-bold font-MyFont pl-3">
+              {userInfo.dailyRate}
+            </span>
+          </div>
+        )}
           <div className="content py-4 flex flex-col justify-between">
             {/* <button
               // onClick={handleButtonClick}

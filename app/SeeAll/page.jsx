@@ -73,6 +73,7 @@ const SeeAll = () => {
         {title}
       </h1>
       {/* Dropdown for skill types filter */}
+      { title === 'Skilled Worker' && (
       <div className="flex justify-center mb-4">
         <label htmlFor="skillFilter" className="mr-2 font-main text-lg">
           Filter by Skill:
@@ -91,7 +92,7 @@ const SeeAll = () => {
           ))}
         </select>
       </div>
-
+      )}
       <div className="flex justify-center">
         {loading ? (
           <MutatingDots
