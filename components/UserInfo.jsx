@@ -149,14 +149,6 @@ export default function UserInfo() {
   };
   const [showDropdown, setShowDropdown] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [userData, setUserData] = useState({
-    lastName: session?.user?.lastName || "",
-    firstName: session?.user?.firstName || "",
-    email: session?.user?.email || "",
-    phoneNumber: session?.user?.phoneNumber || "",
-    homeAddress: session?.user?.homeAddress || ""
-  });
-
   const handleEditToggle = () => {
     setEditMode((prevMode) => !prevMode);
   };
@@ -168,7 +160,7 @@ export default function UserInfo() {
 
   const updateUserInfo = async () => {
     try {
-      const { email, firstName, lastName, phoneNumber, homeAddress } = userInfo;
+      const { email, firstName, lastName, phoneNumber, homeAddress, dailyRate, birthDate } = userInfo;
       const response = await fetch('/api/update-profile', {
         method: 'POST',
         headers: {
@@ -177,11 +169,15 @@ export default function UserInfo() {
         body: JSON.stringify({
           email: session?.user?.email,
           newEmail: email,
-          firstName, lastName, phoneNumber, homeAddress,
+          firstName, lastName, phoneNumber, homeAddress, dailyRate, birthDate,
         }),
       });
       const result = await response.json();
       if (response.ok) {
+        const userData = {
+          email, firstName, lastName, phoneNumber, homeAddress, dailyRate, birthDate,
+        };
+        setUserInfo(userData);
         toast.success(result.message);
       } else {
         toast.error(result.message);
@@ -282,6 +278,38 @@ export default function UserInfo() {
               />
             ) : (
               userInfo.homeAddress
+            )}
+          </span>
+        </div>
+        <div className="font-main">
+          Daily Rate:
+          <span className="font-bold font-MyFont pl-3">
+            {editMode ? (
+              <input
+                type="text"
+                name="dailyRate"
+                value={userInfo.dailyRate}
+                onChange={handleInputChange}
+                className="border-b border-gray-300 focus:outline-none"
+              />
+            ) : (
+              userInfo.dailyRate
+            )}
+          </span>
+        </div>
+        <div className="font-main">
+          Birth Date:
+          <span className="font-bold font-MyFont pl-3">
+            {editMode ? (
+              <input
+                type="date"
+                name="birthDate"
+                value={userInfo.birthDate}
+                onChange={handleInputChange}
+                className="border-b border-gray-300 focus:outline-none"
+              />
+            ) : (
+              userInfo.birthDate
             )}
           </span>
         </div>

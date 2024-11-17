@@ -12,18 +12,27 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: true,
+      required: false,
       unique:true,
+      sparse: true,
     },
     phoneNumber: {
       type: String,
-      required: true,
+      required: false,
       unique:true,
+      sparse: true,
     },
     homeAddress: {
       type: String,
-      required: true,
-      unique:true,
+      required: false,
+    },
+    birthDate: {
+      type: Date,
+      required: false,
+    },
+    dailyRate: {
+      type: Number,
+      required: false,
     },
     password: {
       type: String,

@@ -12,6 +12,8 @@ export default function RegisterForm() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [homeAddress, setHomeAddress] = useState("");
+  const [birthDate, setBirthdate] = useState("");
+  const [dailyRate, setDailyRate] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
@@ -21,18 +23,24 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!firstName || !lastName || !email || !password || !role) {
+    if (!firstName || !lastName || (!email && !phoneNumber) || !password || !role) {
       setError("All fields are necessary.");
       return;
     }
 
     try {
-      const resUserExists = await fetch("api/userExists", {
+      const resUserExists = email ? await fetch("api/userExists", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
+      }) : await fetch("api/userExists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: phoneNumber }),
       });
 
       const { user } = await resUserExists.json();
@@ -53,6 +61,8 @@ export default function RegisterForm() {
           email,
           phoneNumber,
           homeAddress,
+          birthDate,
+          dailyRate,
           password,
           role,
         }),
@@ -80,9 +90,7 @@ export default function RegisterForm() {
     </h1>
     <div className="md:divide-x flex flex-col md:flex-row ">
       <div className="flex pb-3 md:pb-0 md:pr-10 xl:pr-20 font-main text-xl md:text-3xl ">
-        
-       Welcome to <br className="hidden lg:flex pt-2"></br> The Website
-      
+        Welcome to <br className="hidden lg:flex pt-2"></br> The Website
       </div>
       <div className="flex-1 pt-8 md:pt-0 md:pl-10 xl:pl-20">
         <h2 className="text-xl mb-2 font-MyFont font-bold">Register Now!</h2>
@@ -143,6 +151,29 @@ export default function RegisterForm() {
                 placeholder="Enter Your Home Address"
                 className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
                 type="text"
+                name="home-address"
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
+              Birth Date
+              <input
+                onChange={(e) => setBirthdate(e.target.value)}
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="date"
+                name="birthdate"
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
+              Preferred Rate Daily
+              <input
+                onChange={(e) => setDailyRate(e.target.value)}
+                placeholder="Enter Your Daily Rate"
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="number"
                 name="home-address"
               />
             </label>

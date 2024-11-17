@@ -75,12 +75,12 @@ export default function LoginForm() {
           <h2 className="text-xl mb-2 font-MyFont font-bold">Login Now!</h2>
           <div className="mb-4">
             <label className="font-MyFont font-medium">
-              Email Address
+              Email Address or Phone Number
               <input
                    onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter Your Valid Email"
+                placeholder="Enter Your Valid Email or Phone number"
                 className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
-                type="email"
+                type="text"
                 name="email"
               />
             </label>

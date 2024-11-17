@@ -9,18 +9,25 @@ import Wishlist from "@/models/wishlist";
 
 export async function POST(req) {
   try {
-    const { firstName, lastName, email, phoneNumber, homeAddress, password, role } = await req.json();
+    const { firstName, lastName, email, phoneNumber, homeAddress, birthDate, dailyRate, password, role } = await req.json();
     const hashedPassword = await bcrypt.hash(password, 10);
     await connectMongoDB();
-    const newUser = await User.create({
+    const userData = {
       firstName,
       lastName,
-      email,
-      phoneNumber,
       homeAddress,
+      birthDate,
+      dailyRate,
       password: hashedPassword,
       role,
-    });
+    };
+    if (email?.trim()) {
+      userData.email = email.trim();
+    }
+    if (phoneNumber?.trim()) {
+      userData.phoneNumber = phoneNumber.trim();
+    }
+    const newUser = await User.create(userData);
     // Create a cart collection with the user's _id
     await Cart.create({
       user: newUser._id,
