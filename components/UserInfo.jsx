@@ -160,7 +160,7 @@ export default function UserInfo() {
 
   const updateUserInfo = async () => {
     try {
-      const { email, firstName, lastName, phoneNumber, homeAddress, dailyRate, birthDate } = userInfo;
+      const { email, firstName, lastName, phoneNumber, facebook, homeAddress, yearsExperience, dailyRate, birthDate } = userInfo;
       const response = await fetch('/api/update-profile', {
         method: 'POST',
         headers: {
@@ -169,13 +169,13 @@ export default function UserInfo() {
         body: JSON.stringify({
           email: session?.user?.email,
           newEmail: email,
-          firstName, lastName, phoneNumber, homeAddress, dailyRate, birthDate,
+          firstName, lastName, phoneNumber, facebook, homeAddress, yearsExperience, dailyRate, birthDate,
         }),
       });
       const result = await response.json();
       if (response.ok) {
         const userData = {
-          email, firstName, lastName, phoneNumber, homeAddress, dailyRate, birthDate,
+          email, firstName, lastName, phoneNumber, facebook, homeAddress, yearsExperience, dailyRate, birthDate,
         };
         setUserInfo(userData);
         toast.success(result.message);
@@ -266,6 +266,28 @@ export default function UserInfo() {
           </span>
         </div>
         <div className="font-main">
+          Facebook:
+          {editMode ? (
+            <div className="pl-3">
+              <input
+                type="text"
+                name="facebook"
+                value={userInfo.facebook}
+                onChange={handleInputChange}
+                className="border-b border-gray-300 focus:outline-none"
+              />
+            </div>
+          ) : (
+            <a
+              href={userInfo.facebook}
+              target="_blank"
+              className="font-bold font-MyFont pl-3 hover:underline hover:text-blue-700 transition duration-200"
+            >
+              Visit my account
+            </a>
+          )}
+        </div>
+        <div className="font-main">
           Home Address:
           <span className="font-bold font-MyFont pl-3">
             {editMode ? (
@@ -297,6 +319,24 @@ export default function UserInfo() {
             )}
           </span>
         </div>
+        {session?.user?.role === 'skilled-worker' && (
+          <div className="font-main">
+            Years of Experience:
+            <span className="font-bold font-MyFont pl-3">
+              {editMode ? (
+                <input
+                  type="number"
+                  name="yearsExperience"
+                  value={userInfo.yearsExperience}
+                  onChange={handleInputChange}
+                  className="border-b border-gray-300 focus:outline-none"
+                />
+              ) : (
+                userInfo.yearsExperience
+              )}
+            </span>
+          </div>
+        )}
         {session?.user?.role === 'skilled-worker' && (
           <div className="font-main">
             Daily Rate:

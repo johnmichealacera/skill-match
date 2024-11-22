@@ -22,12 +22,20 @@ const userSchema = new Schema(
       unique:true,
       sparse: true,
     },
+    facebook: {
+      type: String,
+      required: false,
+    },
     homeAddress: {
       type: String,
       required: false,
     },
     birthDate: {
       type: Date,
+      required: false,
+    },
+    yearsExperience: {
+      type: Number,
       required: false,
     },
     dailyRate: {

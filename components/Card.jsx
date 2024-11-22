@@ -61,6 +61,11 @@ function Card({ participants }) {
             <div className="mb-2 md:line-clamp-1">
               <h3 className="text-base font-MyFont">{participant?.homeAddress}</h3>
             </div>
+            {participant?.yearsExperience && (
+              <div className="mb-2 md:line-clamp-1">
+                <h3 className="text-base font-MyFont">{participant.yearsExperience} years of experienced.</h3>
+              </div>
+            )}
             {participant?.dailyRate && (
               <div className="mb-2 md:line-clamp-1">
                 <h3 className="text-base font-MyFont">Php {participant.dailyRate} Daily Rate</h3>

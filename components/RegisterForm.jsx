@@ -11,9 +11,11 @@ export default function RegisterForm() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [facebook, setFacebook] = useState("");
   const [homeAddress, setHomeAddress] = useState("");
   const [birthDate, setBirthdate] = useState("");
   const [dailyRate, setDailyRate] = useState("");
+  const [yearsExperience, setYearsExperience] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
@@ -60,8 +62,10 @@ export default function RegisterForm() {
           lastName,
           email,
           phoneNumber,
+          facebook,
           homeAddress,
           birthDate,
+          yearsExperience,
           dailyRate,
           password,
           role,
@@ -145,6 +149,18 @@ export default function RegisterForm() {
           </div>
           <div className="mb-4">
             <label className="font-MyFont font-medium">
+              Facebook Username
+              <input
+                onChange={(e) => setFacebook(e.target.value)}
+                placeholder="Enter Your Facebook Username"
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="text"
+                name="home-address"
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
               Home Address
               <input
                 onChange={(e) => setHomeAddress(e.target.value)}
@@ -163,6 +179,18 @@ export default function RegisterForm() {
                 className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
                 type="date"
                 name="birthdate"
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
+              Years of Experience
+              <input
+                onChange={(e) => setYearsExperience(e.target.value)}
+                placeholder="Enter years of experience"
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="number"
+                name="home-address"
               />
             </label>
           </div>

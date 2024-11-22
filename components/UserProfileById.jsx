@@ -81,20 +81,28 @@ export default function UserProfileById({ id }) {
         </div>
         {userInfo?.role === 'skilled-worker' && (
           <div className="font-main">
+            Years of Experience:
+            <span className="font-bold font-MyFont pl-3">
+              {userInfo.yearsExperience} years
+            </span>
+          </div>
+        )}
+        {userInfo?.role === 'skilled-worker' && (
+          <div className="font-main">
             Daily Rate:
             <span className="font-bold font-MyFont pl-3">
               {userInfo.dailyRate}
             </span>
           </div>
         )}
-          <div className="content py-4 flex flex-col justify-between">
-            {/* <button
-              // onClick={handleButtonClick}
-              className="bg-textgray justify-center px-2 py-2 font-MyFont text-primary flex-1 rounded md:px-4 text-sm font-semibold"
-            >
-              Message
-            </button> */}
-          </div>
+        <div className="content py-4 flex flex-col justify-between">
+          {/* <button
+            // onClick={handleButtonClick}
+            className="bg-textgray justify-center px-2 py-2 font-MyFont text-primary flex-1 rounded md:px-4 text-sm font-semibold"
+          >
+            Message
+          </button> */}
+        </div>
         </div>
         <div
             className="flex flex-col justify-between rounded border-2 border-bggray align-baseline"
