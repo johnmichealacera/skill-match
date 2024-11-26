@@ -71,11 +71,11 @@ export default function Participants({ heading, order, title, result }) {
       <section className="mx-auto max-w-6xl px-4 py-6 md:px-8 flex">
         {/* Skill Buttons */}
         {heading !== "employer" && (
-          <aside className="flex-shrink-0 pr-4">
+          <aside className="sm:flex-shrink-0 sm:pr-4 pr-0">
             {skillSets.map((skill, index) => (
               <button
                 key={index}
-                className={`block w-full p-2 mb-2 text-left rounded-lg ${
+                className={`block sm:w-full w-auto sm:px-4 px-0 mb-2 text-left sm:text-base text-xs rounded-lg ${
                   selectedSkill === skill
                     ? "bg-blue-500 text-white"
                     : "bg-gray-200 text-gray-700"
@@ -91,9 +91,7 @@ export default function Participants({ heading, order, title, result }) {
         {/* Main Content */}
         <div className="flex-grow">
           <div className="flex items-baseline justify-between">
-            <h2 className="font-main text-2xl font-medium md:text-2xl">
-              {title}
-            </h2>
+            <h2 className="font-main text-2xl font-medium md:text-2xl">{title}</h2>
             <Link
               className="hidden md:flex items-center font-MyFont font-medium"
               href={{
