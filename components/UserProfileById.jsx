@@ -66,6 +66,18 @@ export default function UserProfileById({ id }) {
             </span>
           </div>
           <div className="font-main">
+            Facebook Profile:
+            {userInfo.facebook && (
+            <a
+              href={userInfo.facebook}
+              target="_blank"
+              className="font-bold font-MyFont pl-3 hover:underline hover:text-blue-700 transition duration-200"
+            >
+              Visit my account
+            </a>
+            )}
+          </div>
+          <div className="font-main">
             Home Address:
             <span className="font-bold font-MyFont pl-3">
               {userInfo.homeAddress}

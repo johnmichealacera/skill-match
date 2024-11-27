@@ -71,7 +71,7 @@ export default function Navbar() {
   return (
     <div className="sticky top-0 z-20 ">
       <div className="sticky top-0 z-20 md:justify-between lg:justify-around navbar px-8 py-6 bg-primary nav-main hidden md:flex ">
-        <Link className="font-main text-5xl font-semibold md:flex" href="/">
+        <Link className="font-main text-4xl font-semibold md:flex" href="/">
           {" "}
           Online Skilled Worker Booking System for Socorro{" "}
         </Link>
@@ -79,7 +79,14 @@ export default function Navbar() {
         {session?.user?.role === 'employer' && (
           <>
             <Link
-              href="#"
+              href={{
+                pathname: "/SeeAll",
+                query: {
+                  heading: "skilled-worker",
+                  order: "newest",
+                  title: "Skilled Worker",
+                },
+              }}
               className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
             >
               <CgLogIn className="mt-1 icon-top mr-3" />
@@ -97,7 +104,14 @@ export default function Navbar() {
         {session?.user?.role === 'skilled-worker' && (
           <>
             <Link
-              href="#"
+              href={{
+                pathname: "/SeeAll",
+                query: {
+                  heading: "employer",
+                  order: "newest",
+                  title: "Employer",
+                },
+              }}
               className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
             >
               <CgLogIn className="mt-1 icon-top mr-3" />
@@ -132,14 +146,28 @@ export default function Navbar() {
         ) : (
           <>
             <Link
-              href="#"
+              href={{
+                pathname: "/SeeAll",
+                query: {
+                  heading: "employer",
+                  order: "newest",
+                  title: "Employer",
+                },
+              }}
               className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
             >
               <CgLogIn className="mt-1 icon-top mr-3" />
               <p className="hidden md:block">Find Work</p>
             </Link>
             <Link
-              href="#"
+              href={{
+                pathname: "/SeeAll",
+                query: {
+                  heading: "skilled-worker",
+                  order: "newest",
+                  title: "Skilled Worker",
+                },
+              }}
               className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
             >
               <CgLogIn className="mt-1 icon-top mr-3" />
@@ -154,7 +182,6 @@ export default function Navbar() {
             </Link>
           </>
         )}
-        
         </div>
       </div>
       {/*============================================================================= */}
@@ -163,14 +190,13 @@ export default function Navbar() {
         <div className="flex md:hidden">
           <HiMenuAlt2 className="mt-1 icon-top mr-3" onClick={openModal} />
         </div>
-        <div className="flex  md:hidden">
-          <Link
-            className="font-main text-5xl font-semibold md:text-3xl"
+        <div className="flex md:hidden">
+          <a
+            className="font-main text-base font-semibold"
             href="/"
           >
-            {" "}
-            Online Skilled Worker Booking System for Socorro{" "}
-          </Link>
+            Online Skilled Worker Booking System for Socorro
+          </a>
         </div>
         {session ? (
           <div className="flex mt-2 gap-x-6  mr-2 md:hidden">
@@ -207,18 +233,6 @@ export default function Navbar() {
           >
             <AiOutlineClose className="icon-bottom" />
           </button>
-          <div className="flex flex-col items-center justify-center gap-2 gap-x-4">
-            <Link
-              href="/"
-              className="font-main text-5xl font-medium"
-              onClick={closeModal}
-            >
-              Online Skilled Worker Booking System for Socorro
-            </Link>
-            <p className="text-center px-6 font-MyFont">
-              Your one-stop solution for hiring skilled workers or finding the perfect job.
-            </p>
-          </div>
           <nav className="mt-8 mb-6 self-stretch">
             <div className="relative">
               <ul className="flex flex-col items-start gap-x-2 divide-y divide-gray-200 text-xl md:gap-x-4 font-MyFont">
@@ -226,7 +240,14 @@ export default function Navbar() {
               <>
                 <li className="flex w-full flex-col">
                   <Link
-                    href="#"
+                    href={{
+                      pathname: "/SeeAll",
+                      query: {
+                        heading: "skilled-worker",
+                        order: "newest",
+                        title: "Skilled Worker",
+                      },
+                    }}
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
@@ -250,7 +271,14 @@ export default function Navbar() {
               <>
                 <li className="flex w-full flex-col">
                   <Link
-                    href="#"
+                    href={{
+                      pathname: "/SeeAll",
+                      query: {
+                        heading: "employer",
+                        order: "newest",
+                        title: "Employer",
+                      },
+                    }}
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
@@ -297,7 +325,14 @@ export default function Navbar() {
               <>
                 <li className="flex w-full flex-col">
                   <Link
-                    href="#"
+                    href={{
+                      pathname: "/SeeAll",
+                      query: {
+                        heading: "employer",
+                        order: "newest",
+                        title: "Employer",
+                      },
+                    }}
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
@@ -307,7 +342,14 @@ export default function Navbar() {
                 </li>
                 <li className="flex w-full flex-col">
                   <Link
-                    href="#"
+                    href={{
+                      pathname: "/SeeAll",
+                      query: {
+                        heading: "skilled-worker",
+                        order: "newest",
+                        title: "Skilled Worker",
+                      },
+                    }}
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
