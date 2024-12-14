@@ -117,24 +117,24 @@ export default function Navbar() {
               <CgLogIn className="mt-1 icon-top mr-3" />
               <p className="hidden md:block">Find Work</p>
             </Link>
-            <Link
+          {/* <Link
             href="#"
             className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
           >
             <CgLogIn className="mt-1 icon-top mr-3" />
             <p className="hidden md:block">My Work</p>
-          </Link>
+          </Link> */}
         </>
         )}
         {session ? (
           <>
-            <Link
+          {/* <Link
             href="#"
             className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
           >
             <CgLogIn className="mt-1 icon-top mr-3" />
             <p className="hidden md:block">Messages</p>
-          </Link>
+          </Link> */}
           <Link
             href="/dashboard"
             className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
@@ -300,7 +300,7 @@ export default function Navbar() {
               )}
               {session ? (
                 <>
-                <li className="flex w-full flex-col">
+                {/* <li className="flex w-full flex-col">
                   <Link
                     href="#"
                     onClick={closeModal}
@@ -309,7 +309,7 @@ export default function Navbar() {
                     {" "}
                     <span>Messages</span>
                   </Link>
-                </li>
+                </li> */}
                 <li className="flex w-full flex-col">
                   <Link
                     href="/dashboard"
