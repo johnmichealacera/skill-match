@@ -147,6 +147,14 @@ export default function UserInfo() {
       toast.error('Failed to update user skill set');
     }
   };
+  const removeSkillSet = (skill) => {
+    try {
+      setWorkerSkills(workerSkills.filter((workerSkill) => workerSkill !== skill));
+      setMissingSkillSets([...missingSkillSets, skill]);
+    } catch (err) {
+      console.error('Error removing skill set:', skill);
+    }
+  };
   const [showDropdown, setShowDropdown] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const handleEditToggle = () => {
@@ -427,8 +435,11 @@ export default function UserInfo() {
             Worker Skill Set
           </div>
           {workerSkills.map((skill, index) => (
-            <Link href={`/SkillWorkers/${encodeURIComponent(skill)}/view`}>
-              <div key={index} className="bg-white shadow-md rounded-lg p-6 mb-4">
+            <div
+              key={index}
+              className="bg-white shadow-md rounded-lg p-6 mb-4 flex items-center justify-between"
+            >
+              <div>
                 <h2 className="text-xl font-bold mb-2">{skill}</h2>
                 <img
                   src={`/icons/${skill}.png`}
@@ -437,7 +448,14 @@ export default function UserInfo() {
                   height={50}
                 />
               </div>
-            </Link>
+              <button
+                onClick={() => removeSkillSet(skill)}
+                className="text-red-500 hover:text-red-700 transition duration-200"
+                aria-label={`Remove ${skill}`}
+              >
+                ❌
+              </button>
+            </div>
           ))}
           <button
             onClick={() => updateUserSkillSets()}

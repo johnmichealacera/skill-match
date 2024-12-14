@@ -3,15 +3,12 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Card from "../components/Card";
 import { IoIosArrowForward } from "react-icons/io";
-import { useSession } from "next-auth/react";
 
 export default function Participants({ heading, order, title, result }) {
   const [participants, setParticipants] = useState([]);
   const [filteredParticipants, setFilteredParticipants] = useState([]);
   const [skillSets, setSkillSets] = useState([]);
   const [selectedSkill, setSelectedSkill] = useState("All");
-  const { data: session } = useSession();
-  const [error, setError] = useState("");
 
   const queryParams = {
     heading,
@@ -43,7 +40,7 @@ export default function Participants({ heading, order, title, result }) {
         setParticipants(data);
         setFilteredParticipants(data); // Initially show all participants
         // Extract unique skill sets
-        setSkillSets(["All", ...workerSkillsData?.skills]);
+        setSkillSets([...workerSkillsData?.skills]);
       } catch (error) {
         console.error("Error:", error);
         setBooks([]);
@@ -57,7 +54,7 @@ export default function Participants({ heading, order, title, result }) {
   const handleSkillFilter = (skill) => {
     setSelectedSkill(skill);
     if (skill === "All") {
-      setFilteredParticipants(participants);
+      setFilteredParticipants([]);
     } else {
       const filtered = participants.filter((participant) =>
         participant.skillSets?.includes(skill)
@@ -68,7 +65,11 @@ export default function Participants({ heading, order, title, result }) {
 
   return (
     <div id="books" className="pt-14">
-      <section className="mx-auto max-w-6xl px-4 py-6 md:px-8 flex">
+      <section
+        className={`mx-auto max-w-6xl px-4 py-6 md:px-8 flex ${
+          (selectedSkill === 'All' && heading === "skilled-worker") ? "bg-[url('/skill-worker-transparency1.png')] bg-fit bg-center" : ""
+        }`}
+      >
         {/* Skill Buttons */}
         {heading !== "employer" && (
           <aside className="sm:flex-shrink-0 sm:pr-4 pr-0">
@@ -104,7 +105,7 @@ export default function Participants({ heading, order, title, result }) {
             </Link>
           </div>
 
-          <Card participants={filteredParticipants} />
+          <Card participants={(selectedSkill === 'All' &&  heading === "skilled-worker")? [] : filteredParticipants} />
 
           <div className="mt-8 flex items-center justify-center md:hidden">
             <Link
