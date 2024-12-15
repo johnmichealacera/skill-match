@@ -58,6 +58,10 @@ const userSchema = new Schema(
       type: Array,
       required: false,
     },
+    skillSetsImageByType: {
+      type: Array,
+      required: false,
+    },
   },
 
   { timestamps: true }

@@ -130,7 +130,7 @@ export default function UserProfileById({ id }) {
             Worker Skill Set
           </div>
           {workerSkills.map((skill, index) => (
-            <Link key={index} href={`/SkillWorkers/${encodeURIComponent(skill)}/view`}>
+            <Link href={`/worker/${userInfo._id}/skill/${skill}`}>
               <div className="bg-white shadow-md rounded-lg p-6 mb-4">
                 <h2 className="text-xl font-bold mb-2">{skill}</h2>
                 <img

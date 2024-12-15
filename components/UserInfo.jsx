@@ -439,7 +439,7 @@ export default function UserInfo() {
               key={index}
               className="bg-white shadow-md rounded-lg p-6 mb-4 flex items-center justify-between"
             >
-              <div>
+              <Link href={`/worker/${userInfo._id}/skill/${skill}`}>
                 <h2 className="text-xl font-bold mb-2">{skill}</h2>
                 <img
                   src={`/icons/${skill}.png`}
@@ -447,7 +447,7 @@ export default function UserInfo() {
                   width={50}
                   height={50}
                 />
-              </div>
+              </Link>
               <button
                 onClick={() => removeSkillSet(skill)}
                 className="text-red-500 hover:text-red-700 transition duration-200"
