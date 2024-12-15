@@ -131,8 +131,10 @@ export default function SkilledWorkersByTypeView ({id, workerType}) {
   return (
     <div className="max-w-6xl w-full mx-auto px-4 py-6 justify-start md:px-8">
       <h1 className="font-main text-xl my-4 flex justify-center font-semibold mr-auto md:text-2xl ">
-        {" "}
-        Skilled Workers: {workerType.toUpperCase()}
+        Name: {userInfo?.lastName}, {userInfo?.firstName}
+      </h1>
+      <h1 className="font-main text-xl my-4 flex justify-center font-semibold mr-auto md:text-2xl ">
+        Skill: {workerType.toUpperCase()}
       </h1>
       <div className="" >
       {loading ? (
