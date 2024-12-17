@@ -92,13 +92,13 @@ export default function Navbar() {
               <CgLogIn className="mt-1 icon-top mr-3" />
               <p className="hidden md:block">Find Talents</p>
             </Link>
-            <Link
-            href="#"
-            className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+          {/* <Link
+          href="#"
+          className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
           >
             <CgLogIn className="mt-1 icon-top mr-3" />
             <p className="hidden md:block">My Talents</p>
-          </Link>
+          </Link> */}
         </>
         )}
         {session?.user?.role === 'skilled-worker' && (
@@ -255,7 +255,7 @@ export default function Navbar() {
                     <span>Find Talents</span>
                   </Link>
                 </li>
-                <li className="flex w-full flex-col">
+                {/* <li className="flex w-full flex-col">
                   <Link
                     href="#"
                     onClick={closeModal}
@@ -264,7 +264,7 @@ export default function Navbar() {
                     {" "}
                     <span>My Talents</span>
                   </Link>
-                </li>
+                </li> */}
               </>
               )}
               {session?.user?.role === 'skilled-worker' && (
