@@ -3,12 +3,28 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function UserProfileById({ id }) {
   const [workerSkills, setWorkerSkills] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [imageUrl, setImageUrl] = useState('');
+  const [session, setSession] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const token = Cookies.get("token");
+
+  async function fetchSessionData() {
+    try {
+      const response = await fetch('/api/session');
+      if (!response.ok) {
+        throw new Error('Failed to fetch session');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Failed to fetch session:', error);
+      throw new Error('Failed to fetch session');
+    }
+  }
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -32,7 +48,74 @@ export default function UserProfileById({ id }) {
       }
     };
     fetchUserData();
+    const fetchSession = async () => {
+      const session = await fetchSessionData();
+      setSession(session);
+    };
+    fetchSession();
   }, [id]);
+
+  const handleHire = async () => {
+    try {
+      const response = await fetch("/api/hireWorker", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          workerId: id, // Assuming the worker's ID is passed as a prop
+          hireBy: session?.user?.email, // Employer's email passed as a prop
+        }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        // Update userInfo dynamically
+        setUserInfo((prev) => ({
+          ...prev,
+          hireBy: session?.user?.email,
+        }));
+        toast.success("Worker hired successfully!");
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.error("Error hiring worker:", error);
+      alert("An error occurred while hiring the worker.");
+    }
+
+    setIsModalOpen(false); // Close the modal after completing the action
+  };
+
+  const endWorkerContract = async () => {
+    try {
+      const response = await fetch("/api/endWorkerContract", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          workerId: id, // Assuming the worker's ID is passed as a prop
+          hireBy: session?.user?.email, // Employer's email passed as a prop
+        }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        // Update userInfo dynamically
+        setUserInfo((prev) => ({
+          ...prev,
+          hireBy: null,
+        }));
+        toast.success("Worker contract ended successfully!");
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.error("Error ending worker contract:", error);
+      alert("An error occurred while ending the worker contract.");
+    }
+  };
 
   return (
     <div className="max-w-6xl w-full mx-auto px-4 py-6 justify-start md:px-8">
@@ -122,8 +205,53 @@ export default function UserProfileById({ id }) {
               }}
             />
           </div>
+          {session?.user?.role === 'employer' && (
+            <div className="flex w-full">
+              {userInfo?.hireBy ? (
+                <p className="bg-red-400 flex-1 text-center">Unavailable</p>
+              ) : (
+                <p className="bg-green-400 flex-1 text-center">Available</p>
+              )}
+              {userInfo?.hireBy ? (
+                userInfo?.hireBy === session?.user?.email ? (
+                  <button className="bg-blue-400 flex-1 text-center" onClick={() => endWorkerContract(true)}>End Contract</button>
+                ) : (
+                  <p className="bg-blue-400 flex-1 text-center">Hired By {userInfo?.hireBy}</p>
+                )
+              ) : (
+                <button
+                  className="flex-1 text-center bg-blue-500 text-white"
+                  onClick={() => setIsModalOpen(true)} // Open modal on button click
+                >
+                  Hire me
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">Hire this skilled worker?</h2>
+            <p className="mb-6">Are you sure you want to hire this worker?</p>
+            <div className="flex justify-end gap-4">
+              <button
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
+                onClick={() => setIsModalOpen(false)} // Close modal on cancel
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleHire} // Call hire function on confirmation
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {userInfo?.role === 'skilled-worker' && (
         <>
           <div className="flex pb-8 md:pb-0 md:pr-10 xl:pr-20 font-main text-xl md:text-3xl mt-8">

@@ -62,6 +62,10 @@ const userSchema = new Schema(
       type: Array,
       required: false,
     },
+    hireBy: {
+      type: String,
+      required: false,
+    },
   },
 
   { timestamps: true }
