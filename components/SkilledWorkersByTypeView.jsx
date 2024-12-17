@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { MutatingDots } from "react-loader-spinner";
 import { handleFileChange } from "@jmacera/cloudinary-image-upload";
@@ -8,7 +7,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function SkilledWorkersByTypeView ({id, workerType}) {
+export default function SkilledWorkersByTypeView({ id, workerType }) {
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
   const [loading, setloading] = useState(false);
@@ -29,12 +28,14 @@ export default function SkilledWorkersByTypeView ({id, workerType}) {
       throw new Error('Failed to fetch session');
     }
   }
+
   useEffect(() => {
     const fetchSession = async () => {
       const session = await fetchSessionData();
       setSession(session);
     };
     fetchSession();
+
     const fetchBooks = async () => {
       try {
         const resUsersByRole = await fetch("/api/workersImageByType", {
@@ -45,7 +46,6 @@ export default function SkilledWorkersByTypeView ({id, workerType}) {
           body: JSON.stringify({ id }),
         });
         const { users: data } = await resUsersByRole.json();
-
         setUserInfo(data || []);
         const skillSetImage = data?.skillSetsImageByType?.find((item) => item?.skill === workerType);
         setSkillSetImages(skillSetImage?.images || []);
@@ -58,17 +58,20 @@ export default function SkilledWorkersByTypeView ({id, workerType}) {
   }, [workerType]);
 
   const fileInputRef = useRef(null);
+
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
+
   const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL;
   const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
   const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+
   const handleMediaChange = async (e) => {
     const file = e.target.files[0];
 
     try {
-      const imageUrl = await handleFileChange(cloudinaryUrl, uploadPreset, apiKey, file)
+      const imageUrl = await handleFileChange(cloudinaryUrl, uploadPreset, apiKey, file);
       if (imageUrl) {
         setImageUrl(imageUrl);
         await updateUserImageByType(imageUrl);
@@ -80,6 +83,7 @@ export default function SkilledWorkersByTypeView ({id, workerType}) {
       console.error('Error uploading file:', err);
     }
   };
+
   const updateUserImageByType = async (url) => {
     try {
       let newSkillSetsImage;
@@ -128,6 +132,42 @@ export default function SkilledWorkersByTypeView ({id, workerType}) {
     }
   };
 
+  const deleteImage = async (imageUrlToDelete) => {
+    try {
+      // Filter out the image from the skillSetImages array
+      const updatedSkillSetImages = skillSetImages.filter((image) => image !== imageUrlToDelete);
+
+      // Update the skillSetImages state to reflect the deletion
+      setSkillSetImages(updatedSkillSetImages);
+
+      // Call the API to update the user info on the backend
+      const rawSkillSetsImageByType = userInfo?.skillSetsImageByType?.find((item) => item?.skill === workerType);
+      if (rawSkillSetsImageByType) {
+        rawSkillSetsImageByType.images = updatedSkillSetImages;
+      }
+
+      const response = await fetch('/api/updateWorkerImageByType', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: userInfo?.email,
+          imageUrls: userInfo?.skillSetsImageByType,
+        }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        toast.success('Image deleted successfully');
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      toast.error('Failed to delete image');
+    }
+  };
+
   return (
     <div className="max-w-6xl w-full mx-auto px-4 py-6 justify-start md:px-8">
       <h1 className="font-main text-xl my-4 flex justify-center font-semibold mr-auto md:text-2xl ">
@@ -136,65 +176,71 @@ export default function SkilledWorkersByTypeView ({id, workerType}) {
       <h1 className="font-main text-xl my-4 flex justify-center font-semibold mr-auto md:text-2xl ">
         Skill: {workerType.toUpperCase()}
       </h1>
-      <div className="" >
-      {loading ? (
-        <MutatingDots
-          height="100"
-          width="100"
-          color="#ff0000"
-          secondaryColor="#ff0000"
-          radius="12.5"
-          ariaLabel="mutating-dots-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-        />
-      ) : (
-      <div
-      className="grid grid-cols-2 gap-4 py-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-    >
-      {skillSetImages?.map((participant, index) => (
-        <div
-          key={index}
-          className="flex flex-col justify-between rounded border-2 border-bggray align-baseline"
-        >
-          <div className="p-4 cursor-pointer bg-bggray">
-            {/* Image container with fixed aspect ratio */}
-            <div className="relative w-full h-40 sm:h-64 md:h-72 lg:h-80 overflow-hidden rounded-md">
-              <Image
-                src={participant || "/creation1.png"}
-                priority="high"
-                unoptimized={true}
-                className="absolute object-cover w-full h-full"
-                fill
-                alt="Picture of the participant"
-                onError={(e) => {
-                  e.target.src = "/creation1.png";
-                }}
-              />
-            </div>
+      <div>
+        {loading ? (
+          <MutatingDots
+            height="100"
+            width="100"
+            color="#ff0000"
+            secondaryColor="#ff0000"
+            radius="12.5"
+            ariaLabel="mutating-dots-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        ) : (
+          <div className="grid grid-cols-2 gap-4 py-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {skillSetImages?.map((participant, index) => (
+              <div key={index} className="flex flex-col justify-between rounded border-2 border-bggray align-baseline">
+                <div className="p-4 cursor-pointer bg-bggray">
+                  {/* Image container with fixed aspect ratio */}
+                  <div className="relative w-full h-40 sm:h-64 md:h-72 lg:h-80 overflow-hidden rounded-md">
+                    <Image
+                      src={participant || "/creation1.png"}
+                      priority="high"
+                      unoptimized={true}
+                      className="absolute object-cover w-full h-full"
+                      fill
+                      alt="Picture of the participant"
+                      onError={(e) => {
+                        e.target.src = "/creation1.png";
+                      }}
+                    />
+                  </div>
+                  {/* Delete Button */}
+                  {session?.user?.email === userInfo?.email && (
+                    <button
+                      onClick={() => deleteImage(participant)}
+                      className="bg-red-500 text-white mt-2 py-1 px-2 rounded"
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
+        )}
+      </div>
+
+      {session?.user?.email === userInfo?.email && (
+        <div className="content px-4 py-4 flex flex-col justify-between">
+          <button
+            onClick={handleButtonClick}
+            className="bg-textgray justify-center px-2 py-2 font-MyFont text-primary flex-1 rounded md:px-4 text-sm font-semibold"
+          >
+            Upload Skill Image
+          </button>
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleMediaChange}
+            className="hidden"
+          />
         </div>
-        ))}
-      </div>
-      )}
-      </div>
-      {session?.user?.email === userInfo?.email && (<div className="content px-4 py-4 flex flex-col justify-between">
-        <button
-          onClick={handleButtonClick}
-          className="bg-textgray justify-center px-2 py-2 font-MyFont text-primary flex-1 rounded md:px-4 text-sm font-semibold"
-        >
-          Upload Skill Image
-        </button>
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleMediaChange}
-          className="hidden"
-        />
-      </div>
       )}
     </div>
   );
-};
+}

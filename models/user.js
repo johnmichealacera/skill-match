@@ -66,6 +66,10 @@ const userSchema = new Schema(
       type: String,
       required: false,
     },
+    feedback: {
+      type: Array,
+      required: false,
+    },
   },
 
   { timestamps: true }

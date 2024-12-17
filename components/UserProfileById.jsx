@@ -11,6 +11,8 @@ export default function UserProfileById({ id }) {
   const [imageUrl, setImageUrl] = useState('');
   const [session, setSession] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState(''); // Feedback textarea state
+  const [feedbackList, setFeedbackList] = useState([]); // Feedback list state
   const token = Cookies.get("token");
 
   async function fetchSessionData() {
@@ -42,6 +44,7 @@ export default function UserProfileById({ id }) {
           setUserInfo(data);
           setImageUrl(data?.imageUrl);
           setWorkerSkills(data?.skillSets);
+          setFeedbackList(data?.feedback || []); // Load existing feedback if available
         }
       } catch (error) {
         console.error("Error:", error);
@@ -63,14 +66,13 @@ export default function UserProfileById({ id }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          workerId: id, // Assuming the worker's ID is passed as a prop
-          hireBy: session?.user?.email, // Employer's email passed as a prop
+          workerId: id,
+          hireBy: session?.user?.email,
         }),
       });
 
       const result = await response.json();
       if (response.ok) {
-        // Update userInfo dynamically
         setUserInfo((prev) => ({
           ...prev,
           hireBy: session?.user?.email,
@@ -84,7 +86,7 @@ export default function UserProfileById({ id }) {
       alert("An error occurred while hiring the worker.");
     }
 
-    setIsModalOpen(false); // Close the modal after completing the action
+    setIsModalOpen(false);
   };
 
   const endWorkerContract = async () => {
@@ -95,14 +97,13 @@ export default function UserProfileById({ id }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          workerId: id, // Assuming the worker's ID is passed as a prop
-          hireBy: session?.user?.email, // Employer's email passed as a prop
+          workerId: id,
+          hireBy: session?.user?.email,
         }),
       });
 
       const result = await response.json();
       if (response.ok) {
-        // Update userInfo dynamically
         setUserInfo((prev) => ({
           ...prev,
           hireBy: null,
@@ -114,6 +115,34 @@ export default function UserProfileById({ id }) {
     } catch (error) {
       console.error("Error ending worker contract:", error);
       alert("An error occurred while ending the worker contract.");
+    }
+  };
+
+  const handleFeedbackSubmit = async () => {
+    try {
+      const response = await fetch("/api/submitWorkerFeedback", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          workerId: id,
+          feedback,
+        }),
+      });
+
+      if (response.ok) {
+        const newFeedback = await response.json();
+        setFeedbackList(newFeedback); // Add new feedback to the list
+        setFeedback(''); // Clear the textarea
+        toast.success("Feedback submitted successfully!");
+      } else {
+        const error = await response.json();
+        toast.error(error.message);
+      }
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      toast.error("An error occurred while submitting feedback.");
     }
   };
 
@@ -252,13 +281,33 @@ export default function UserProfileById({ id }) {
           </div>
         </div>
       )}
+      {session?.user?.role === 'employer' && (
+        <div className="mt-6">
+          <h2 className="text-lg font-bold">Submit Feedback</h2>
+          <textarea
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            className="w-full p-3 border rounded-lg mt-2"
+            rows="4"
+            placeholder="Write your feedback here..."
+          ></textarea>
+          <button
+            onClick={handleFeedbackSubmit}
+            className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
+          >
+            Submit Feedback
+          </button>
+        </div>
+      )}
+
+      {/* Feedback Section */}
       {userInfo?.role === 'skilled-worker' && (
         <>
           <div className="flex pb-8 md:pb-0 md:pr-10 xl:pr-20 font-main text-xl md:text-3xl mt-8">
             Worker Skill Set
           </div>
           {workerSkills.map((skill, index) => (
-            <Link href={`/worker/${userInfo._id}/skill/${skill}`}>
+            <Link href={`/worker/${userInfo._id}/skill/${skill}`} key={index}>
               <div className="bg-white shadow-md rounded-lg p-6 mb-4">
                 <h2 className="text-xl font-bold mb-2">{skill}</h2>
                 <img
@@ -270,6 +319,22 @@ export default function UserProfileById({ id }) {
               </div>
             </Link>
           ))}
+
+          <div className="mt-8">
+            <h2 className="text-xl font-bold mb-4">Feedback</h2>
+            {feedbackList.length > 0 ? (
+              feedbackList.map((item, index) => (
+                <div
+                  key={index}
+                  className="p-4 border-b border-gray-200 bg-gray-100 rounded mb-2"
+                >
+                  {item}
+                </div>
+              ))
+            ) : (
+              <p>No feedback yet.</p>
+            )}
+          </div>
         </>
       )}
     </div>
