@@ -234,7 +234,7 @@ export default function UserProfileById({ id }) {
               }}
             />
           </div>
-          {session?.user?.role === 'employer' && (
+          {session?.user?.role === 'employer' && userInfo?.role === 'skilled-worker' && (
             <div className="flex w-full">
               {userInfo?.hireBy ? (
                 <p className="bg-red-400 flex-1 text-center">Unavailable</p>
@@ -281,7 +281,7 @@ export default function UserProfileById({ id }) {
           </div>
         </div>
       )}
-      {session?.user?.role === 'employer' && (
+      {session?.user?.role === 'employer' && userInfo?.role === 'skilled-worker' && (
         <div className="mt-6">
           <h2 className="text-lg font-bold">Submit Feedback</h2>
           <textarea
