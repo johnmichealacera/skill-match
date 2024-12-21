@@ -32,18 +32,18 @@ export default function Main() {
         <p className="font-MyFont lg:text-lg opacity-80 ">Your one-stop solution for hiring skilled workers or finding the perfect job.</p>
         <div className="flex flex-row gap-x-8 mt-6 opacity-80 !stroke-current stroke-2 ">
           {" "}
-          <Link href="https://www.facebook.com/">
+          <Link href="https://www.facebook.com/profile.php?id=61570610289661">
             {" "}
             <FiFacebook className="icon-bottom " />{" "}
           </Link>
-          <Link href="https://www.instagram.com/_mayank._k___/">
+          {/* <Link href="https://www.instagram.com/_mayank._k___/">
             {" "}
             <SlSocialInstagram className="icon-bottom" />{" "}
-          </Link>
-          <Link href="https://t.me/+919023373686">
+          </Link> */}
+          {/* <Link href="https://t.me/+919023373686">
             {" "}
             <PiTelegramLogo className="icon-bottom" />{" "}
-          </Link>
+          </Link> */}
           <Link href="mailto:bgfcstudents02@gmail.com">
             {" "}
             <IoMailUnreadOutline className="icon-bottom" />

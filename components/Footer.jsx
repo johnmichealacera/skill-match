@@ -91,18 +91,18 @@ export default function Footer() {
         <div className="social-group col-span-2  md:row-span-1 md:self-center">
           <div className="flex flex-row gap-x-8 mt-3 justify-center md:justify-start opacity-80 !stroke-current stroke-2 ">
             {" "}
-            <Link href="https://www.facebook.com/">
+            <Link href="https://www.facebook.com/profile.php?id=61570610289661">
               {" "}
               <FiFacebook className="icon-bottom " />{" "}
             </Link>
-            <Link href="https://www.instagram.com/_mayank._k___/">
+            {/* <Link href="https://www.instagram.com/_mayank._k___/">
               {" "}
               <SlSocialInstagram className="icon-bottom" />{" "}
-            </Link>
-            <Link href="https://t.me/+919023373686">
+            </Link> */}
+            {/* <Link href="https://t.me/+919023373686">
               {" "}
               <PiTelegramLogo className="icon-bottom" />{" "}
-            </Link>
+            </Link> */}
             <Link href="mailto:bgfcstudents02@gmail.com">
               {" "}
               <IoMailUnreadOutline className="icon-bottom" />

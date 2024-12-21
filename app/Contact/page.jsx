@@ -32,14 +32,14 @@ export default function Contact() {
         <div className="md:flex pb-8 md:pb-0 md:pr-10 xl:pr-20 hidden font-MyFont">
           <div className="flex flex-row gap-x-8 mt-3 justify-center md:justify-start opacity-80 !stroke-current stroke-2 ">
             {" "}
-            <Link href="https://www.facebook.com/">
+            <Link href="https://www.facebook.com/profile.php?id=61570610289661">
               {" "}
               <FiFacebook href="" className="icon-bottom " />{" "}
             </Link>
-            <Link href="https://www.instagram.com">
+            {/* <Link href="https://www.instagram.com">
               {" "}
               <SlSocialInstagram className="icon-bottom" />{" "}
-            </Link>
+            </Link> */}
             <Link href="https://t.me/+919023373686">
               {" "}
               <PiTelegramLogo className="icon-bottom" />{" "}
