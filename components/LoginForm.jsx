@@ -27,6 +27,7 @@ export default function LoginForm() {
       const res3 = await signIn("credentials", {
         email,
         password,
+        role,
         redirect: false,
       });
       const res =  await fetch(`/api/login`,{
@@ -108,9 +109,10 @@ export default function LoginForm() {
               <option value="">Select role...</option>
               <option value="employer">Employer</option>
               <option value="skilled-worker">Skilled Worker</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
-      
+
           <button
             type="button"
             onClick={handleSubmit}

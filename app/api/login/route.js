@@ -18,9 +18,14 @@ export async function POST(req) {
 
   try {
     const user = await User.findOne({
-      $or: [
-        { email },
-        { phoneNumber: email }
+      $and: [
+        {
+          $or: [
+            { email },
+            { phoneNumber: email }
+          ]
+        },
+        { role }
       ]
     });
     if (!user) {
@@ -36,10 +41,10 @@ export async function POST(req) {
         expiresIn: "30d",
       });
 
-      const { name, email } = user;
+      const { name, email, role } = user;
 
       return NextResponse.json(
-        { token, user: { name, email } },
+        { token, user: { name, email, role } },
         { status: 201 }
       );
     } else {

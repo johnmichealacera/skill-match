@@ -17,6 +17,7 @@ export default function RegisterForm() {
   const [dailyRate, setDailyRate] = useState("");
   const [yearsExperience, setYearsExperience] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
 
@@ -25,6 +26,10 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (password !== confirmPassword) {
+      setError("Password do not match.");
+      return;
+    }
     if (!firstName || !lastName || (!email && !phoneNumber) || !password || !role) {
       setError("All fields are necessary.");
       return;
@@ -215,6 +220,18 @@ export default function RegisterForm() {
                 className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
                 type="password"
                 name="password"
+              />
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="font-MyFont font-medium">
+              Confirm Password
+              <input
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm password"
+                className="my-1 block w-full md:pr-10 rounded border-2 border-gray-300 bg-primary py-1 px-2 font-normal outline-skin-accent"
+                type="password"
+                name="confirmPassword"
               />
             </label>
           </div>

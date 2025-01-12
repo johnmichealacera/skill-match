@@ -19,6 +19,20 @@ export default function UserInfo() {
   const [missingSkillSets, setMissingSkillSets] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [imageUrl, setImageUrl] = useState('');
+  // Add this to the state variables
+  const [customSkill, setCustomSkill] = useState("");
+
+  // Function to handle adding a custom skill
+  const handleAddCustomSkill = () => {
+    if (customSkill.trim() && !workerSkills.includes(customSkill)) {
+      setWorkerSkills([...workerSkills, customSkill]);
+      setCustomSkill(""); // Clear the input field
+      toast.success(`Skill "${customSkill}" added!`);
+    } else {
+      toast.error("Skill already exists or is invalid.");
+    }
+  };
+
 
   const token = Cookies.get("token");
 
@@ -429,7 +443,7 @@ export default function UserInfo() {
             </div>
         </div>
       </div>
-      {session?.user?.role === 'skilled-worker' && (
+      {session?.user?.role === "skilled-worker" && (
         <>
           <div className="flex pb-8 md:pb-0 md:pr-10 xl:pr-20 font-main text-xl md:text-3xl mt-8">
             Worker Skill Set
@@ -446,6 +460,10 @@ export default function UserInfo() {
                   alt={`${skill} Icon`}
                   width={50}
                   height={50}
+                  onError={(e) => {
+                    e.target.onerror = null; // Prevents infinite fallback loop
+                    e.target.src = "/icons/custom.png"; // Replace with your fallback image path
+                  }}
                 />
               </Link>
               <button
@@ -471,7 +489,8 @@ export default function UserInfo() {
             Add Skill Set
           </button>
           {showDropdown && (
-            <div className="bg-white shadow-md rounded-lg p-4 mt-2">
+            <div>
+              <div className="bg-white shadow-md rounded-lg p-4 mt-2">
               <h3 className="text-lg font-bold mb-2">Available Skills</h3>
               <ul>
                 {missingSkillSets.map((skill, index) => (
@@ -487,6 +506,25 @@ export default function UserInfo() {
                   </li>
                 ))}
               </ul>
+              </div>
+              <div className="bg-white shadow-md rounded-lg p-4 mt-4">
+              <h3 className="text-lg font-bold mb-2">Add Custom Skill</h3>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={customSkill}
+                  onChange={(e) => setCustomSkill(e.target.value)}
+                  placeholder="Enter a custom skill"
+                  className="border border-gray-300 rounded px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={handleAddCustomSkill}
+                  className="bg-green-500 text-white px-4 py-2 rounded"
+                >
+                  Add
+                </button>
+              </div>
+              </div>
             </div>
           )}
         </>

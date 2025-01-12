@@ -70,6 +70,14 @@ const userSchema = new Schema(
       type: Array,
       required: false,
     },
+    notification: {
+      type: Array,
+      required: false,
+    },
+    status: {
+      type: String,
+      required: false,
+    },
   },
 
   { timestamps: true }

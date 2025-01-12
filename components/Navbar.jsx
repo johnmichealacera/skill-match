@@ -6,11 +6,8 @@ import {
 } from "react-icons/ai";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { IoMailUnreadOutline } from "react-icons/io5";
-import { PiTelegramLogo } from "react-icons/pi";
-import { SlSocialInstagram } from "react-icons/sl";
 import { FiFacebook } from "react-icons/fi";
 import { CgLogIn } from "react-icons/cg";
-import { useWishlist } from "@/context/WIshlistContext";
 
 async function fetchSessionData() {
   try {
@@ -25,10 +22,30 @@ async function fetchSessionData() {
   }
 }
 
+async function fetchNotifications(email) {
+  try {
+    const response = await fetch("/api/notifications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch notifications');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch notifications:', error);
+    throw new Error('Failed to fetch notifications');
+  }
+}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [session, setSession] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const openModal = () => {
     setIsOpen(true);
   };
@@ -36,12 +53,31 @@ export default function Navbar() {
     setIsOpen(false);
   };
   useEffect(() => {
-    const fetchSession = async () => {
-      const session = await fetchSessionData();
-      setSession(session);
+    const fetchSessionAndNotifications = async () => {
+      try {
+        const sessionData = await fetchSessionData();
+        setSession(sessionData);
+
+        const email = sessionData?.user?.email;
+        if (email) {
+          const userNotifications = await fetchNotifications(email);
+          setNotifications(userNotifications?.notification);
+        }
+      } catch (error) {
+        console.error("Error fetching session or notifications:", error);
+      }
     };
-    fetchSession();
+
+    fetchSessionAndNotifications();
   }, []);
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
+  const closeNotifications = () => {
+    setShowNotifications(false);
+  };
   useEffect(() => {
     const navbar = document.querySelector(".navbar");
     const toggleShadow = () => {
@@ -92,13 +128,24 @@ export default function Navbar() {
               <CgLogIn className="mt-1 icon-top mr-3" />
               <p className="hidden md:block">Find Talents</p>
             </Link>
-          {/* <Link
-          href="#"
-          className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
-          >
-            <CgLogIn className="mt-1 icon-top mr-3" />
-            <p className="hidden md:block">My Talents</p>
-          </Link> */}
+            <button
+              onClick={toggleNotifications}
+              className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+            >
+              <CgLogIn className="mt-1 icon-top mr-3" />
+              <p className="hidden md:block">Notifications</p>
+            </button>
+        </>
+        )}
+        {session?.user?.role === 'admin' && (
+          <>
+            <Link
+              href="/manageAccount"
+              className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+            >
+              <CgLogIn className="mt-1 icon-top mr-3" />
+              <p className="hidden md:block">Manage Accounts</p>
+            </Link>
         </>
         )}
         {session?.user?.role === 'skilled-worker' && (
@@ -117,24 +164,17 @@ export default function Navbar() {
               <CgLogIn className="mt-1 icon-top mr-3" />
               <p className="hidden md:block">Find Work</p>
             </Link>
-          {/* <Link
-            href="#"
-            className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
-          >
-            <CgLogIn className="mt-1 icon-top mr-3" />
-            <p className="hidden md:block">My Work</p>
-          </Link> */}
+            <button
+              onClick={toggleNotifications}
+              className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+            >
+              <CgLogIn className="mt-1 icon-top mr-3" />
+              <p className="hidden md:block">Notifications</p>
+            </button>
         </>
         )}
         {session ? (
           <>
-          {/* <Link
-            href="#"
-            className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
-          >
-            <CgLogIn className="mt-1 icon-top mr-3" />
-            <p className="hidden md:block">Messages</p>
-          </Link> */}
           <Link
             href="/dashboard"
             className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
@@ -184,6 +224,51 @@ export default function Navbar() {
         )}
         </div>
       </div>
+      {showNotifications && (
+        <div className="fixed inset-0 z-40 flex">
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={closeNotifications}
+          ></div>
+
+          {/* Notification Content */}
+          <div className="relative ml-auto w-80 bg-white h-screen shadow-lg">
+            <button
+              className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+              onClick={closeNotifications}
+            >
+              <AiOutlineClose size={24} />
+            </button>
+            <div className="p-6">
+              <h2 className="text-xl font-bold mb-4">Notifications</h2>
+              <ul className="space-y-4">
+                {notifications.length > 0 ? (
+                  notifications.map((notification, index) => (
+                    <li key={index} className="bg-gray-100 p-4 rounded-md">
+                      {notification.jobOffer && (
+                        <p className="text-sm">
+                          You have been sent a job offer from {notification.jobOffer}.
+                        </p>
+                      )}
+                      {notification.endContract && (
+                        <p className="text-sm">
+                          Contract has been ended by {notification.endContract}.
+                        </p>
+                      )}
+                      <span className="text-xs text-gray-500">
+                        {new Date(notification?.date).toLocaleString()}
+                      </span>
+                    </li>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500">No notifications</p>
+                )}
+              </ul>
+            </div>
+          </div>
+        </div>
+        )}
       {/*============================================================================= */}
       <div className="sticky top-0 z-20 flex justify-between small-navbar px-4 py-6 bg-primary md:hidden ">
         {/*hidden nav section ---------------- */}
@@ -255,16 +340,13 @@ export default function Navbar() {
                     <span>Find Talents</span>
                   </Link>
                 </li>
-                {/* <li className="flex w-full flex-col">
-                  <Link
-                    href="#"
-                    onClick={closeModal}
-                    className="flex items-center gap-x-2 py-1 px-2 text-xl"
+                <Link
+                  href="#"
+                  className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
                   >
-                    {" "}
-                    <span>My Talents</span>
-                  </Link>
-                </li> */}
+                  <CgLogIn className="mt-1 icon-top mr-3" />
+                  <p className="hidden md:block">Notifications</p>
+                </Link>
               </>
               )}
               {session?.user?.role === 'skilled-worker' && (
@@ -289,6 +371,14 @@ export default function Navbar() {
                 <li className="flex w-full flex-col">
                   <Link
                     href="#"
+                    className="flex items-center gap-x-2 py-1 px-2 text-xl"
+                  >
+                    <span>Notifications</span>
+                  </Link>
+                </li>
+                <li className="flex w-full flex-col">
+                  <Link
+                    href="#"
                     onClick={closeModal}
                     className="flex items-center gap-x-2 py-1 px-2 text-xl"
                   >
@@ -300,16 +390,6 @@ export default function Navbar() {
               )}
               {session ? (
                 <>
-                {/* <li className="flex w-full flex-col">
-                  <Link
-                    href="#"
-                    onClick={closeModal}
-                    className="flex items-center gap-x-2 py-1 px-2 text-xl"
-                  >
-                    {" "}
-                    <span>Messages</span>
-                  </Link>
-                </li> */}
                 <li className="flex w-full flex-col">
                   <Link
                     href="/dashboard"
@@ -355,6 +435,13 @@ export default function Navbar() {
                   >
                     {" "}
                     <span>Find Talents</span>
+                  </Link>
+                  <Link
+                    href="#"
+                    className="hover:opacity-95 opacity-70 flex flex-row link link-underline link-underline-black"
+                    >
+                    <CgLogIn className="mt-1 icon-top mr-3" />
+                    <p className="hidden md:block">Notifications</p>
                   </Link>
                 </li>
                 <li className="flex w-full flex-col">
@@ -408,14 +495,6 @@ export default function Navbar() {
               {" "}
               <FiFacebook className="icon-bottom " />{" "}
             </Link>
-            {/* <Link href="https://www.instagram.com/_mayank._k___/">
-              {" "}
-              <SlSocialInstagram className="icon-bottom" />{" "}
-            </Link> */}
-            {/* <Link href="https://t.me/+919023373686">
-              {" "}
-              <PiTelegramLogo className="icon-bottom" />{" "}
-            </Link> */}
             <Link href="mailto:bgfcstudents02@gmail.com">
               {" "}
               <IoMailUnreadOutline className="icon-bottom" />

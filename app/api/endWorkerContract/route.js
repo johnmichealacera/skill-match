@@ -9,6 +9,15 @@ export async function PUT(req) {
     const { workerId, hireBy } = await req.json();
     const result = await User.updateOne({ _id: new ObjectId(workerId) },
       { $set: { hireBy: null } });
+      const notification = {
+        endContract: hireBy,
+        date: new Date(),
+      }
+      // Push the new feedback into the feedback array
+      await User.updateOne(
+        { _id: new ObjectId(workerId) },
+        { $push: { notification } }
+      );
 
     return NextResponse.json(result);
   } catch (error) {
