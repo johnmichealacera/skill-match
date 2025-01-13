@@ -256,6 +256,16 @@ export default function Navbar() {
                           Contract has been ended by {notification.endContract}.
                         </p>
                       )}
+                      {notification.hireWorker && (
+                        <p className="text-sm">
+                          You hired worker with jobId {notification.hireWorker}.
+                        </p>
+                      )}
+                      {notification.endWorkerContract && (
+                        <p className="text-sm">
+                          You ended contract worker with jobId {notification.endWorkerContract}.
+                        </p>
+                      )}
                       <span className="text-xs text-gray-500">
                         {new Date(notification?.date).toLocaleString()}
                       </span>

@@ -18,6 +18,16 @@ export async function PUT(req) {
       { _id: new ObjectId(workerId) },
       { $push: { notification } }
     );
+    const jobNotification = {
+      hireWorker: new ObjectId(workerId),
+      date: new Date(),
+    }
+
+    // Push the new feedback into the feedback array
+    await User.updateOne(
+      { email: hireBy },
+      { $push: { notification: jobNotification } }
+    );
 
     return NextResponse.json(result);
   } catch (error) {
